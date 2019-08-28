@@ -9,6 +9,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+dump.sql
 ### Laravel template
 /vendor/
 node_modules/
