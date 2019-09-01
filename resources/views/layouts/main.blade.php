@@ -17,6 +17,7 @@
     <link href="/css/font-awesome.min.css" rel="stylesheet">
     <!-- dataTables -->
     <link href="/css/jquery.dataTables.min.css" rel="stylesheet">
+{{--    <link href="/css/buttons.bootstrap.min.css" rel="stylesheet">--}}
     <!-- Custom Theme Style -->
     <link href="/css/custom.min.css" rel="stylesheet">
 </head>
@@ -28,7 +29,7 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="{{ route('main') }}" class="site_title"><i class="fa fa-paw"></i> <span>Финплан</span></a>
+                        <a href="{{ route('main') }}" class="site_title"><i class="fa fa-paw"></i> <span>Главная панель</span></a>
                     </div>
 
                     <div class="clearfix"></div>
@@ -44,7 +45,7 @@
                         </div>
                         <div class="profile_info">
                             <span>Здравствуйте,</span>
-                            <h2>{{ Auth::user()->name }}</h2>
+                            <h2>{{ Auth::user()->fname }}</h2>
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
@@ -56,46 +57,40 @@
                         <div class="menu_section">
                             <ul class="nav side-menu">
                                 <li><a href="{{ route('main') }}"><i class="fa fa-home"></i> Рабочий стол </a></li>
-                                <li><a><i class="fa fa-university"></i> Банк и касса <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-gears"></i> Настройки <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ route('statements') }}">Банковские выписки</a></li>
-                                        <li><a href="{{ route('cash_docs') }}">Кассовые документы</a></li>
-                                        <li><a href="{{ route('advances') }}">Авансовые отчеты</a></li>
+                                        <li><a href="{{ route('sysconst') }}">Системные константы</a></li>
+                                        <li><a href="#">Отправка СМС</a></li>
+                                        <li><a href="#">MQTT</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-credit-card"></i> Покупки и продажи <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ route('sales') }}">Реализация (продажи)</a></li>
-                                        <li><a href="{{ route('purchases') }}">Поступление (покупки)</a></li>
-                                        <li><a href="{{ route('nomenclatures') }}">Номенклатура</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-users"></i> Сотрудники и зарплата <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        {{--<li><a href="#">Сотрудники</a></li>--}}
-                                        <li><a href="{{ route('persons') }}">Физические лица</a></li>
+                                        <li><a href="#">Реализация (продажи)</a></li>
+                                        <li><a href="#">Поступление (покупки)</a></li>
+                                        <li><a href="#">Номенклатура</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-sitemap"></i> Наши юр. лица <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ route('organizations') }}">Организации</a></li>
-                                        <li><a href="{{ route('divisions') }}">Подразделения</a></li>
-                                        <li><a href="{{ route('bacc') }}">Банковские счета</a></li>
+                                        <li><a href="#">Организации</a></li>
+                                        <li><a href="#">Подразделения</a></li>
+                                        <li><a href="#">Банковские счета</a></li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-address-card"></i>Контрагенты <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-address-card"></i> Учет ЖКУ <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ route('groups') }}">Группы контрагентов</a></li>
-                                        <li><a href="{{ route('contracts') }}">Договоры</a></li>
-                                        <li><a href="{{ route('physical') }}">Физлица</a></li>
-                                        <li><a href="{{ route('legal_entity') }}">Юрлица</a></li>
+                                        <li><a href="#">Группы контрагентов</a></li>
+                                        <li><a href="#">Договоры</a></li>
+                                        <li><a href="#">Физлица</a></li>
+                                        <li><a href="#">Юрлица</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-bar-chart-o"></i> Отчеты <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ route('cashBookFilter') }}">Кассовая книга</a></li>
-                                        <li><a href="{{ route('acctFilter') }}">Карточка счета</a></li>
-                                        <li><a href="{{ route('balanceFilter') }}">Оборотно-сальдовая ведомость по счету</a></li>
+                                        <li><a href="#">Кассовая книга</a></li>
+                                        <li><a href="#">Карточка счета</a></li>
+                                        <li><a href="#">Оборотно-сальдовая ведомость по счету</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -104,24 +99,24 @@
                             <ul class="nav side-menu">
                                 <li><a><i class="fa fa-address-book"></i> Справочники <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ route('currency') }}">Валюты</a></li>
-                                        <li><a href="{{ route('banks') }}">Банки</a></li>
-                                        <li><a href="{{ route('operations') }}">Виды операции</a></li>
-                                        <li><a href="{{ route('typedocs') }}">Виды договоров</a></li>
-                                        <li><a href="{{ route('settlements') }}">Виды расчетов</a></li>
-                                        <li><a href="{{ route('codes') }}">План счетов бухучета</a></li>
+                                        <li><a href="#">Типы устройств</a></li>
+                                        <li><a href="{{ route('location') }}">Локации</a></li>
+                                        <li><a href="#">Категории</a></li>
+                                        <li><a href="#">Места хранения</a></li>
+                                        <li><a href="#">Номенклатура</a></li>
+                                        <li><a href="#">Ед. измерения</a></li>
                                     </ul>
                                 </li>
-                                @if(\App\User::hasRole('admin'))
+                                {{--@if(\App\User::hasRole('admin'))
                                 <li><a><i class="fa fa-cog"></i> Настройки <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="{{ route('users') }}">Пользователи</a></li>
-                                        <li><a href="{{ route('roles') }}">Роли</a></li>
-                                        <li><a href="{{ route('actions') }}">Разрешения</a></li>
+                                        <li><a href="#">Пользователи</a></li>
+                                        <li><a href="#">Роли</a></li>
+                                        <li><a href="#">Разрешения</a></li>
                                         </li>
                                     </ul>
                                 </li>
-                                @endif
+                                @endif--}}
                             </ul>
                         </div>
 
@@ -136,7 +131,7 @@
                         <a data-toggle="tooltip" data-placement="top" title="FullScreen">
                             <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
                         </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Журнал событий" href="{{ route('eventlog') }}">
+                        <a data-toggle="tooltip" data-placement="top" title="Журнал событий" href="#">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Logout" href="{{ route('logout') }}">
@@ -190,7 +185,7 @@
                                 <div class="icon"><i class="fa fa-rub"></i></div>
                                 <div class="count">Касса</div>
                                 <h3>Остаток: {{ empty($kassa) ? '0' : $kassa }} (руб.)</h3>
-                                <p><a href="{{ route('cashBookFilter') }}">подробнее</a></p>
+                                <p><a href="#">подробнее</a></p>
                             </div>
                         </div>
                         <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -220,7 +215,7 @@
         <!-- footer content -->
         <footer>
             <div class="pull-right">
-                Великолепные системы
+                Домовенок
             </div>
             <div class="clearfix"></div>
         </footer>
