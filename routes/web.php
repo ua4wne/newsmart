@@ -36,6 +36,16 @@ Route::middleware(['auth'])->group(function(){
         //locations/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\LocationController@delete','as'=>'locationDel']);
     });
+    //devtypes/ группа обработки роутов devtypes
+    Route::group(['prefix'=>'devtypes'], function(){
+        Route::get('/',['uses'=>'DeviceTypeController@index','as'=>'devtype']);
+        //devtypes/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\DeviceTypeController@create','as'=>'devtypeAdd']);
+        //devtypes/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\DeviceTypeController@edit','as'=>'devtypeEdit']);
+        //devtypes/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\DeviceTypeController@delete','as'=>'devtypeDel']);
+    });
 });
 
 Auth::routes();

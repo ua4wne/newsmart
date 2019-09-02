@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Models\Location;
+use App\Models\DeviceType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class LocationController extends Controller
+class DeviceTypeController extends Controller
 {
     public function create(Request $request){
         if($request->isMethod('post')){
             $input = $request->except('_token'); //параметр _token нам не нужен
-            $model = new Location();
+            $model = new DeviceType();
             $input['created_at'] = date('Y-m-d H:i:s');
             $model->fill($input);
             if($model->save()){
@@ -27,10 +27,9 @@ class LocationController extends Controller
     public function edit(Request $request){
         if($request->isMethod('post')){
             $input = $request->except('_token'); //параметр _token нам не нужен
-            $model = Location::find($input['id_val']);
+            $model = DeviceType::find($input['id_val']);
             $model->name = $input['name'];
-            $model->alias = $input['alias'];
-            $model->is_show = $input['is_show'];
+            $model->descr = $input['descr'];
             if($model->save()){
                 return 'OK';
             }
@@ -41,11 +40,8 @@ class LocationController extends Controller
     public function delete(Request $request){
         if($request->isMethod('post')){
             $id = $request->input('id');
-            $model = Location::find($id);
+            $model = DeviceType::find($id);
             if($model->delete()) {
-                /*    $msg = 'Банковская выписка '. $model->doc_num .' была удалена!';
-                    //вызываем event
-                    event(new AddEventLogs('info',Auth::id(),$msg));*/
                 return 'OK';
             }
             else{

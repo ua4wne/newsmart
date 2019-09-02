@@ -36,7 +36,7 @@
                     <div class="form-group">
                         {!! Form::label('name', 'Наименование:',['class'=>'col-xs-3 control-label']) !!}
                         <div class="col-xs-9">
-                            {!! Form::text('name', old('name'),['class' => 'form-control','placeholder'=>'Введите наименование','required'=>'required','maxlength'=>'50','id'=>'name'])!!}
+                            {!! Form::text('name', old('name'),['class' => 'form-control','placeholder'=>'Введите наименование','required'=>'required','maxlength'=>'50','id'=>'nameloc'])!!}
                             {!! $errors->first('name', '<p class="text-danger">:message</p>') !!}
                         </div>
                     </div>
@@ -142,9 +142,13 @@
                     <tr>
                         <td>{{ $row->name }}</td>
                         <td>{{ $row->alias}}</td>
-                        <td>{{ $row->is_show }}</td>
+                        @if($row->is_show)
+                            <td>Да</td>
+                        @else
+                            <td>Нет</td>
+                        @endif
                         <td style="width:100px;">
-                            <div class="form-group" role="group" id="{{ $doc->id }}">
+                            <div class="form-group" role="group" id="{{ $row->id }}">
                                 <button class="btn btn-success btn-sm val_edit" type="button" data-toggle="modal" data-target="#editVal" title="Редактировать запись"><i class="fa fa-edit" aria-hidden="true"></i></button>
                                 <button class="btn btn-danger btn-sm val_delete" type="button" title="Удалить запись"><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </div>
@@ -162,7 +166,6 @@
 
 @section('user_script')
     <script src="/js/jquery.dataTables.min.js"></script>
-    {{--    <script src="/js/dataTables.buttons.min.js"></script>--}}
 
     <script>
         var myDatatable = $('#my_datatable').DataTable( {
@@ -173,6 +176,9 @@
             e.preventDefault();
             var error=0;
             var row = '';
+            var show = 'Нет';
+            if($('#is_show').val()==1) show = 'Да';
+
             $("#new_val").find(":input").each(function() {// проверяем каждое поле ввода в форме
                 if($(this).attr("required")=='required'){ //обязательное для заполнения поле формы?
                     if(!$(this).val()){// если поле пустое
@@ -200,14 +206,13 @@
                         else {
                             //location.reload();
                             myDatatable.row.add([
-                                $('#location').val(),
+                                $('#nameloc').val(),
                                 $('#alias').val(),
-                                $('#is_show').val(),
+                                show,
                                 res
                             ]).draw();
-                            $('#location').val('');
+                            $('#nameloc').val('');
                             $('#alias').val('');
-                            //$('#descr').val('');
                             $(".modal").modal("hide");
                         }
                     },
@@ -222,6 +227,8 @@
         $('#edit_btn').click(function(e){
             e.preventDefault();
             var error=0;
+            var show = 'Нет';
+            if($('#eis_show').val()==1) show = 'Да';
             $("#edit_val").find(":input").each(function() {// проверяем каждое поле ввода в форме
                 if($(this).attr("required")=='required'){ //обязательное для заполнения поле формы?
                     if(!$(this).val()){// если поле пустое
@@ -249,9 +256,9 @@
                             alert('Ошибка обновления данных!');
                         else{
                             $(".modal").modal("hide");
-                            row.prevAll().eq(2).text($('#elocation').val());
+                            row.prevAll().eq(2).text($('#ename').val());
                             row.prevAll().eq(1).text($('#ealias').val());
-                            row.prevAll().eq(0).text($('#eis_show').val());
+                            row.prevAll().eq(0).text(show);
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
@@ -267,11 +274,15 @@
                 var id = $(this).parent().attr("id");
                 var location = $(this).parent().parent().prevAll().eq(2).text();
                 var alias = $(this).parent().parent().prevAll().eq(1).text();
-                var is_show = $(this).parent().parent().prevAll().eq(0).text();
-
-                $('#elocation').val(location);
+                var isshow = $(this).parent().parent().prevAll().eq(0).text();
+                $('#ename').val(location);
                 $('#ealias').val(alias);
-                //$('#eis_show').val(is_show);
+                $('#eis_show option:selected').each(function(){
+                    this.selected=false;
+                });
+
+                $("#eis_show :contains("+isshow+")").attr("selected", "selected");
+
                 $('#id_val').val(id);
 
                 row = $(this).parent().parent();
@@ -314,5 +325,3 @@
 
     </script>
 @endsection
-
-

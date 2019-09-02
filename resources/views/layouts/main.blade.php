@@ -99,7 +99,7 @@
                             <ul class="nav side-menu">
                                 <li><a><i class="fa fa-address-book"></i> Справочники <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Типы устройств</a></li>
+                                        <li><a href="{{ route('devtype') }}">Типы устройств</a></li>
                                         <li><a href="{{ route('location') }}">Локации</a></li>
                                         <li><a href="#">Категории</a></li>
                                         <li><a href="#">Места хранения</a></li>
