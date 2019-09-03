@@ -10,4 +10,9 @@ class Material extends Model
     protected $table = 'materials';
 
     protected $fillable = ['name','category_id','image'];
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category','category_id','id');
+    }
 }

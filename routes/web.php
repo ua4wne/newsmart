@@ -76,6 +76,16 @@ Route::middleware(['auth'])->group(function(){
         //units/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\UnitController@delete','as'=>'unitDel']);
     });
+    //materials/ группа обработки роутов materials
+    Route::group(['prefix'=>'materials'], function(){
+        Route::get('/',['uses'=>'MaterialController@index','as'=>'material']);
+        //materials/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\MaterialController@create','as'=>'materialAdd']);
+        //materials/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\MaterialController@edit','as'=>'materialEdit']);
+        //materials/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\MaterialController@delete','as'=>'materialDel']);
+    });
 });
 
 Auth::routes();

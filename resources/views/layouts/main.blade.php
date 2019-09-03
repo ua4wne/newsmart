@@ -103,7 +103,7 @@
                                         <li><a href="{{ route('location') }}">Локации</a></li>
                                         <li><a href="{{ route('category') }}">Категории</a></li>
                                         <li><a href="{{ route('cell') }}">Места хранения</a></li>
-                                        <li><a href="#">Номенклатура</a></li>
+                                        <li><a href="{{ route('material') }}">Номенклатура</a></li>
                                         <li><a href="{{ route('unit') }}">Ед. измерения</a></li>
                                     </ul>
                                 </li>

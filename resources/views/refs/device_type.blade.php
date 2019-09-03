@@ -28,7 +28,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-times-circle fa-lg" aria-hidden="true"></i>
                     </button>
-                    <h4 class="modal-title">Новый тип</h4>
+                    <h4 class="modal-title">Новая запись</h4>
                 </div>
                 <div class="modal-body">
                     {!! Form::open(['url' => '#','class'=>'form-horizontal','method'=>'POST','id'=>'new_val']) !!}
