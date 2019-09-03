@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Models\Category;
+use App\Models\Cell;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CategoryController extends Controller
+class CellController extends Controller
 {
     public function create(Request $request){
         if($request->isMethod('post')){
             $input = $request->except('_token'); //параметр _token нам не нужен
-            $model = new Category();
+            $model = new Cell();
             $input['created_at'] = date('Y-m-d H:i:s');
             $model->fill($input);
             if($model->save()){
@@ -27,7 +27,7 @@ class CategoryController extends Controller
     public function edit(Request $request){
         if($request->isMethod('post')){
             $input = $request->except('_token'); //параметр _token нам не нужен
-            $model = Category::find($input['id_val']);
+            $model = Cell::find($input['id_val']);
             $model->name = $input['name'];
             if($model->save()){
                 return 'OK';
@@ -39,7 +39,7 @@ class CategoryController extends Controller
     public function delete(Request $request){
         if($request->isMethod('post')){
             $id = $request->input('id');
-            $model = Category::find($id);
+            $model = Cell::find($id);
             if($model->delete()) {
                 return 'OK';
             }

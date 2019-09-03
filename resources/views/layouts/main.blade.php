@@ -101,10 +101,10 @@
                                     <ul class="nav child_menu">
                                         <li><a href="{{ route('devtype') }}">Типы устройств</a></li>
                                         <li><a href="{{ route('location') }}">Локации</a></li>
-                                        <li><a href="#">Категории</a></li>
-                                        <li><a href="#">Места хранения</a></li>
+                                        <li><a href="{{ route('category') }}">Категории</a></li>
+                                        <li><a href="{{ route('cell') }}">Места хранения</a></li>
                                         <li><a href="#">Номенклатура</a></li>
-                                        <li><a href="#">Ед. измерения</a></li>
+                                        <li><a href="{{ route('unit') }}">Ед. измерения</a></li>
                                     </ul>
                                 </li>
                                 {{--@if(\App\User::hasRole('admin'))

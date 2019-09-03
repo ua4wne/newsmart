@@ -14,7 +14,7 @@ class CreateDeviceTypesTable extends Migration
     public function up()
     {
         Schema::create('device_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('name',30);
             $table->text('descr')->nullable();
             $table->timestamps();

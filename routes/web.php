@@ -46,6 +46,36 @@ Route::middleware(['auth'])->group(function(){
         //devtypes/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\DeviceTypeController@delete','as'=>'devtypeDel']);
     });
+    //categories/ группа обработки роутов categories
+    Route::group(['prefix'=>'categories'], function(){
+        Route::get('/',['uses'=>'CategoryController@index','as'=>'category']);
+        //categories/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\CategoryController@create','as'=>'categoryAdd']);
+        //categories/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\CategoryController@edit','as'=>'categoryEdit']);
+        //categories/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\CategoryController@delete','as'=>'categoryDel']);
+    });
+    //cells/ группа обработки роутов cells
+    Route::group(['prefix'=>'cells'], function(){
+        Route::get('/',['uses'=>'CellController@index','as'=>'cell']);
+        //cells/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\CellController@create','as'=>'cellAdd']);
+        //cells/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\CellController@edit','as'=>'cellEdit']);
+        //cells/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\CellController@delete','as'=>'cellDel']);
+    });
+    //units/ группа обработки роутов units
+    Route::group(['prefix'=>'units'], function(){
+        Route::get('/',['uses'=>'UnitController@index','as'=>'unit']);
+        //units/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\UnitController@create','as'=>'unitAdd']);
+        //units/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\UnitController@edit','as'=>'unitEdit']);
+        //units/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\UnitController@delete','as'=>'unitDel']);
+    });
 });
 
 Auth::routes();
