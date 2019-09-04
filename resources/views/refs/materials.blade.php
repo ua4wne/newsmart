@@ -104,7 +104,7 @@
                         <td>{{ $row->category->name}}</td>
                         <td style="width:100px;">
                             <div class="form-group" role="group" id="{{ $row->id }}">
-                                <button class="btn btn-success btn-sm val_edit" type="button" data-toggle="modal" data-target="#editVal" title="Редактировать запись"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                <a href="{{ route('materialEdit',['id'=>$row->id]) }}"><button class="btn btn-success btn-sm val_edit" type="button" title="Редактировать запись"><i class="fa fa-edit" aria-hidden="true"></i></button></a>
                                 <button class="btn btn-danger btn-sm val_delete" type="button" title="Удалить запись"><i class="fa fa-trash" aria-hidden="true"></i></button>
                             </div>
                         </td>

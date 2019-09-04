@@ -27,17 +27,28 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <a href="{{ route('material') }}"><i class="fa fa-times-circle fa-lg" aria-hidden="true"></i></a>
+                        <a href="{{ route('material') }}"><i class="fa fa-times-circle fa-lg"
+                                                             aria-hidden="true"></i></a>
                     </button>
-                    <h4 class="modal-title">Новая запись</h4>
+                    <h4 class="modal-title">Редактирование записи</h4>
                 </div>
-                {!! Form::open(['url' => route('materialAdd'),'class'=>'form-horizontal','method'=>'POST','id'=>'new_val','enctype'=>'multipart/form-data']) !!}
+                {!! Form::open(['url' => route('materialEdit',['id'=>$data['id']]),'class'=>'form-horizontal','method'=>'POST','id'=>'new_val','enctype'=>'multipart/form-data']) !!}
                 <div class="modal-body">
-
+                    <div class="form-group">
+                        {!! Form::label('old_image', 'Изображение:',['class'=>'col-xs-3 control-label']) !!}
+                        <div class="col-xs-offset-2 col-xs-10">
+                            @if(empty($data['image']))
+                                {!! Html::image('images/noimage.jpg', 'noimage', ['class'=>'img-fluid, img-thumbnail, center-block, img_midi']) !!}
+                            @else
+                                {!! Html::image('images/gallery/'.$data['image'],'$data[\'image\']',['class'=>'img-fluid, img-thumbnail, center-block, img_midi']) !!}
+                            @endif
+                            {!! Form::hidden('old_image', $data['image']) !!}
+                        </div>
+                    </div>
                     <div class="form-group">
                         {!! Form::label('name', 'Наименование:',['class'=>'col-xs-3 control-label']) !!}
                         <div class="col-xs-9">
-                            {!! Form::text('name', old('name'),['class' => 'form-control','placeholder'=>'Введите наименование','required'=>'required','maxlength'=>'100','id'=>'name'])!!}
+                            {!! Form::text('name', $data['name'],['class' => 'form-control','placeholder'=>'Введите наименование','required'=>'required','maxlength'=>'100','id'=>'name'])!!}
                             {!! $errors->first('name', '<p class="text-danger">:message</p>') !!}
                         </div>
                     </div>
@@ -45,7 +56,7 @@
                     <div class="form-group">
                         {!! Form::label('category_id', 'Категория:',['class'=>'col-xs-3 control-label']) !!}
                         <div class="col-xs-9">
-                            {!! Form::select('category_id',$catsel, old('category_id'), ['class' => 'form-control','required'=>'required','id'=>'catid']); !!}
+                            {!! Form::select('category_id',$catsel, $data['category_id'], ['class' => 'form-control','required'=>'required','id'=>'catid']); !!}
                             {!! $errors->first('category_id', '<p class="text-danger">:message</p>') !!}
                         </div>
                     </div>
@@ -60,7 +71,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="{{ route('material') }}"><button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button></a>
+                    <a href="{{ route('material') }}">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    </a>
                     <button type="submit" class="btn btn-primary" id="new_btn">Сохранить</button>
                 </div>
                 {!! Form::close() !!}

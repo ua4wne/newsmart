@@ -83,8 +83,8 @@ Route::middleware(['auth'])->group(function(){
         //Route::post('/ajax/add',['uses'=>'Ajax\MaterialController@create','as'=>'materialAdd']);
         //materials/add
         Route::match(['get','post'],'/add',['uses'=>'MaterialController@create','as'=>'materialAdd']);
-        //materials/ajax/edit
-        Route::post('/ajax/edit',['uses'=>'Ajax\MaterialController@edit','as'=>'materialEdit']);
+        //materials/edit
+        Route::match(['get','post'],'/edit/{id?}',['uses'=>'MaterialController@edit','as'=>'materialEdit']);
         //materials/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\MaterialController@delete','as'=>'materialDel']);
     });
