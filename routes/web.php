@@ -80,7 +80,9 @@ Route::middleware(['auth'])->group(function(){
     Route::group(['prefix'=>'materials'], function(){
         Route::get('/',['uses'=>'MaterialController@index','as'=>'material']);
         //materials/ajax/add
-        Route::post('/ajax/add',['uses'=>'Ajax\MaterialController@create','as'=>'materialAdd']);
+        //Route::post('/ajax/add',['uses'=>'Ajax\MaterialController@create','as'=>'materialAdd']);
+        //materials/add
+        Route::match(['get','post'],'/add',['uses'=>'MaterialController@create','as'=>'materialAdd']);
         //materials/ajax/edit
         Route::post('/ajax/edit',['uses'=>'Ajax\MaterialController@edit','as'=>'materialEdit']);
         //materials/ajax/del
