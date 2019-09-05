@@ -60,15 +60,13 @@
                                 <li><a><i class="fa fa-gears"></i> Настройки <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ route('sysconst') }}">Системные константы</a></li>
-                                        <li><a href="#">Отправка СМС</a></li>
-                                        <li><a href="#">MQTT</a></li>
+                                        <li><a href="#">Оборудование</a></li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-credit-card"></i> Покупки и продажи <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-wifi"></i> Коммуникации <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Реализация (продажи)</a></li>
-                                        <li><a href="#">Поступление (покупки)</a></li>
-                                        <li><a href="#">Номенклатура</a></li>
+                                        <li><a href="#">Отправка СМС</a></li>
+                                        <li><a href="#">MQTT</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-sitemap"></i> Наши юр. лица <span class="fa fa-chevron-down"></span></a>
@@ -100,6 +98,7 @@
                                 <li><a><i class="fa fa-address-book"></i> Справочники <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ route('devtype') }}">Типы устройств</a></li>
+                                        <li><a href="{{ route('protocol') }}">Типы протоколов</a></li>
                                         <li><a href="{{ route('location') }}">Локации</a></li>
                                         <li><a href="{{ route('category') }}">Категории</a></li>
                                         <li><a href="{{ route('cell') }}">Места хранения</a></li>
@@ -107,16 +106,6 @@
                                         <li><a href="{{ route('unit') }}">Ед. измерения</a></li>
                                     </ul>
                                 </li>
-                                {{--@if(\App\User::hasRole('admin'))
-                                <li><a><i class="fa fa-cog"></i> Настройки <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="#">Пользователи</a></li>
-                                        <li><a href="#">Роли</a></li>
-                                        <li><a href="#">Разрешения</a></li>
-                                        </li>
-                                    </ul>
-                                </li>
-                                @endif--}}
                             </ul>
                         </div>
 

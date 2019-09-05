@@ -76,6 +76,16 @@ Route::middleware(['auth'])->group(function(){
         //units/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\UnitController@delete','as'=>'unitDel']);
     });
+    //protocols/ группа обработки роутов protocols
+    Route::group(['prefix'=>'protocols'], function(){
+        Route::get('/',['uses'=>'ProtocolController@index','as'=>'protocol']);
+        //protocols/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\ProtocolController@create','as'=>'protocolAdd']);
+        //protocols/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\ProtocolController@edit','as'=>'protocolEdit']);
+        //protocols/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\ProtocolController@delete','as'=>'protocolDel']);
+    });
     //materials/ группа обработки роутов materials
     Route::group(['prefix'=>'materials'], function(){
         Route::get('/',['uses'=>'MaterialController@index','as'=>'material']);

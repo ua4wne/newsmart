@@ -40,7 +40,7 @@
                             @if(empty($data['image']))
                                 {!! Html::image('images/noimage.jpg', 'noimage', ['class'=>'img-fluid, img-thumbnail, center-block, img_midi']) !!}
                             @else
-                                {!! Html::image('images/gallery/'.$data['image'],'$data[\'image\']',['class'=>'img-fluid, img-thumbnail, center-block, img_midi']) !!}
+                                {!! Html::image($data['image'],'$data[\'image\']',['class'=>'img-fluid, img-thumbnail, center-block, img_midi']) !!}
                             @endif
                             {!! Form::hidden('old_image', $data['image']) !!}
                         </div>

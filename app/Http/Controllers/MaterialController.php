@@ -51,7 +51,7 @@ class MaterialController extends Controller
                 $file = $request->file('image'); //загружаем файл
                 //создаем произвольное имя файла во избежание проблем с кодировками!
                 $fname = substr_replace(sha1(microtime(true)), '', 12);
-                $input['image'] = $fname.'.'.$file->getClientOriginalExtension();
+                $input['image'] = '/images/gallery/' . $fname.'.'.$file->getClientOriginalExtension();
                 $file->move(public_path().'/images/gallery', $input['image']);
             }
             $model = new Material();
@@ -99,14 +99,15 @@ class MaterialController extends Controller
                 $file = $request->file('image'); //загружаем файл
                 //создаем произвольное имя файла во избежание проблем с кодировками!
                 $fname = substr_replace(sha1(microtime(true)), '', 12);
-                $input['image'] = $fname.'.'.$file->getClientOriginalExtension();
-                $file->move(public_path().'/images/gallery', $input['image']);
+                $input['image'] = '/images/gallery/' . $fname.'.'.$file->getClientOriginalExtension();
+                $file->move(public_path().'/images/gallery/', $input['image']);
             }
             else{
                 $input['image'] = $input['old_image'];
             }
             if($input['image'] != $input['old_image']){ //загрузили новый файл, старый нужно удалить
-                unlink(public_path().'/images/gallery/'.$input['old_image']);
+                if(!empty($input['old_image']))
+                    unlink(public_path().$input['old_image']);
             }
             unset($input['old_image']);
             $model->fill($input);
