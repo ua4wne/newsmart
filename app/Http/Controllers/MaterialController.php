@@ -13,17 +13,10 @@ class MaterialController extends Controller
         if(view()->exists('refs.materials')){
             //выбираем данные из таблицы
             $rows = Material::all();
-            //выбираем все категории
-            $cats = Category::all();
-            $catsel = array();
-            foreach ($cats as $val){
-                $catsel[$val->id] = $val->name;
-            }
             return view('refs.materials',[
                 'title'=>'Номенклатура',
                 'head' => 'Номенклатура',
                 'rows' => $rows,
-                'catsel' =>$catsel,
             ]);
         }
         abort(404);
@@ -106,7 +99,7 @@ class MaterialController extends Controller
                 $input['image'] = $input['old_image'];
             }
             if($input['image'] != $input['old_image']){ //загрузили новый файл, старый нужно удалить
-                if(!empty($input['old_image']))
+                if(($input['old_image']!='/images/noimage.jpg') && !empty($input['old_image']))
                     unlink(public_path().$input['old_image']);
             }
             unset($input['old_image']);

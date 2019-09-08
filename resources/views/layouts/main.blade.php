@@ -60,7 +60,7 @@
                                 <li><a><i class="fa fa-gears"></i> Настройки <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ route('sysconst') }}">Системные константы</a></li>
-                                        <li><a href="#">Оборудование</a></li>
+                                        <li><a href="{{ route('device') }}">Оборудование</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-wifi"></i> Коммуникации <span class="fa fa-chevron-down"></span></a>

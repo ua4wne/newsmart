@@ -13,7 +13,8 @@
     <!-- END BREADCRUMB -->
     <!-- page content -->
     <div class="row">
-        <div class="alert alert-danger print-error-msg" style="display:none">
+        <div class="alert alert-danger print-error-msg panel-remove" style="display:none">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
             <ul></ul>
         </div>
     </div>
@@ -235,12 +236,20 @@
                     data: $('#edit_val').serialize(),
                     success: function (res) {
                         //alert(res);
-                        if (res == 'ERR')
-                            alert('Ошибка обновления данных!');
-                        else {
-                            $(".modal").modal("hide");
-                            row.prevAll().eq(1).text($('#ecode').val());
-                            row.prevAll().eq(0).text($('#ename').val());
+                        if ($.isEmptyObject(res.error)) {
+                            if (res == 'ERR')
+                                alert('Ошибка обновления данных!');
+                            else {
+                                $(".modal").modal("hide");
+                                row.prevAll().eq(1).text($('#ecode').val());
+                                row.prevAll().eq(0).text($('#ename').val());
+                            }
+                        }else {
+                            $(".print-error-msg").find("ul").html('');
+                            $(".print-error-msg").css('display', 'block');
+                            $.each(res.error, function (key, value) {
+                                $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+                            });
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {

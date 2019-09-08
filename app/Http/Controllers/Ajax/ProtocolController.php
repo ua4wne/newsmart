@@ -11,10 +11,14 @@ class ProtocolController extends Controller
 {
     public function create(Request $request){
         if($request->isMethod('post')){
+            $messages = [
+                'required' => 'Поле :attribute обязательно к заполнению',
+                'unique' => 'Поле :attribute должно быть уникальным',
+            ];
             $validator = Validator::make($request->all(), [
                 'code' => 'required|unique:protocols|max:7',
                 'name' => 'required|max:30'
-            ]);
+            ],$messages);
             if ($validator->passes()) {
                 $input = $request->except('_token'); //параметр _token нам не нужен
                 $model = new Protocol();
@@ -34,13 +38,20 @@ class ProtocolController extends Controller
 
     public function edit(Request $request){
         if($request->isMethod('post')){
-            $input = $request->except('_token'); //параметр _token нам не нужен
-            $model = Protocol::find($input['id_val']);
-            $model->name = $input['name'];
-            if($model->save()){
-                return 'OK';
+            $validator = Validator::make($request->all(), [
+                'code' => 'required|max:7',
+                'name' => 'required|max:30'
+            ]);
+            if ($validator->passes()) {
+                $input = $request->except('_token'); //параметр _token нам не нужен
+                $model = Protocol::find($input['id_val']);
+                $model->name = $input['name'];
+                if ($model->save()) {
+                    return 'OK';
+                }
+                return 'ERR';
             }
-            return 'ERR';
+            return response()->json(['error'=>$validator->errors()->all()]);
         }
     }
 

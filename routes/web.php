@@ -89,14 +89,42 @@ Route::middleware(['auth'])->group(function(){
     //materials/ группа обработки роутов materials
     Route::group(['prefix'=>'materials'], function(){
         Route::get('/',['uses'=>'MaterialController@index','as'=>'material']);
-        //materials/ajax/add
-        //Route::post('/ajax/add',['uses'=>'Ajax\MaterialController@create','as'=>'materialAdd']);
         //materials/add
         Route::match(['get','post'],'/add',['uses'=>'MaterialController@create','as'=>'materialAdd']);
         //materials/edit
         Route::match(['get','post'],'/edit/{id?}',['uses'=>'MaterialController@edit','as'=>'materialEdit']);
         //materials/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\MaterialController@delete','as'=>'materialDel']);
+    });
+    //devices/ группа обработки роутов devices
+    Route::group(['prefix'=>'devices'], function(){
+        Route::get('/',['uses'=>'DeviceController@index','as'=>'device']);
+        //devices/add
+        Route::match(['get','post'],'/add',['uses'=>'DeviceController@create','as'=>'deviceAdd']);
+        //devices/edit
+        Route::match(['get','post'],'/edit/{id?}',['uses'=>'DeviceController@edit','as'=>'deviceEdit']);
+        //devices/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\DeviceController@delete','as'=>'deviceDel']);
+    });
+    //options/ группа обработки роутов options
+    Route::group(['prefix'=>'options'], function(){
+        Route::get('/{id}',['uses'=>'OptionController@index','as'=>'option']);
+        //options/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\OptionController@create','as'=>'optionAdd']);
+        //options/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\OptionController@edit','as'=>'optionEdit']);
+        //options/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\OptionController@delete','as'=>'optionDel']);
+    });
+    //rules/ группа обработки роутов rules
+    Route::group(['prefix'=>'rules'], function(){
+        Route::get('/{id}',['uses'=>'RuleController@index','as'=>'rule']);
+        //rules/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\RuleController@create','as'=>'ruleAdd']);
+        //rules/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\RuleController@edit','as'=>'ruleEdit']);
+        //rules/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\RuleController@delete','as'=>'ruleDel']);
     });
 });
 
