@@ -13,7 +13,7 @@ class OptionController extends Controller
             //выбираем данные из таблицы
             $rows = Option::where(['device_id'=>$id])->get();
             $device = Device::find($id)->name;
-            $head = 'Параметры устройства';
+            $head = 'Измеряемые параметры устройством';
             $params = ['state'=>'Состояние','celsio'=>'Температура','humidity'=>'Влажность', 'pressure'=>'Давление',
                 'light'=>'Освещенность', 'alarm'=>'Контроль', 'rssi'=>'Уровень сигнала', 'power'=>'Мощность', 'vcc'=>'Напряжение питания', 'acdc'=>'Напряжение сети','current'=>'Сила тока'];
             return view('options',[

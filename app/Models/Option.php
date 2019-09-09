@@ -13,6 +13,6 @@ class Option extends Model
 
     public function device()
     {
-        return $this->belongsTo('App\Models\Device','option_id','id');
+        return $this->belongsTo('App\Models\Device','device_id','id');
     }
 }
