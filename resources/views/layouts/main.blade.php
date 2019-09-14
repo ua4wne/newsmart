@@ -69,24 +69,15 @@
                                         <li><a href="#">MQTT</a></li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-sitemap"></i> Наши юр. лица <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-calculator"></i> Учет ЖКУ <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Организации</a></li>
-                                        <li><a href="#">Подразделения</a></li>
-                                        <li><a href="#">Банковские счета</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-address-card"></i> Учет ЖКУ <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="#">Группы контрагентов</a></li>
-                                        <li><a href="#">Договоры</a></li>
-                                        <li><a href="#">Физлица</a></li>
-                                        <li><a href="#">Юрлица</a></li>
+                                        <li><a href="{{ route('tarif') }}">Тарифы</a></li>
+                                        <li><a href="{{ route('counter') }}">Счетчики</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-bar-chart-o"></i> Отчеты <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Кассовая книга</a></li>
+                                        <li><a href="#">Расходы ЖКХ</a></li>
                                         <li><a href="#">Карточка счета</a></li>
                                         <li><a href="#">Оборотно-сальдовая ведомость по счету</a></li>
                                     </ul>

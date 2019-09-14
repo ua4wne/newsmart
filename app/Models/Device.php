@@ -25,4 +25,20 @@ class Device extends Model
     {
         return $this->belongsTo('App\Models\DeviceType','type_id','id');
     }
+
+    public function tarif()
+    {
+        return $this->belongsTo('App\Models\Tarif','device_id','id');
+    }
+
+    public function options()
+    {
+        return $this->hasMany('App\Models\Option','device_id', 'id');
+    }
+
+    public function OptionCount()
+    {
+        $option = $this->options()->count('device_id');
+        return $option;
+    }
 }

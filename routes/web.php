@@ -126,6 +126,24 @@ Route::middleware(['auth'])->group(function(){
         //rules/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\RuleController@delete','as'=>'ruleDel']);
     });
+    //tarifs/ группа обработки роутов tarifs
+    Route::group(['prefix'=>'tarifs'], function(){
+        Route::get('/',['uses'=>'TarifController@index','as'=>'tarif']);
+        //tarifs/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\TarifController@create','as'=>'tarifAdd']);
+        //tarifs/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\TarifController@edit','as'=>'tarifEdit']);
+        //tarifs/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\TarifController@delete','as'=>'tarifDel']);
+    });
+    //counters/ группа обработки роутов counters
+    Route::group(['prefix'=>'counters'], function(){
+        Route::get('/',['uses'=>'CounterController@index','as'=>'counter']);
+        //counters/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\CounterController@create','as'=>'counterAdd']);
+        // counters/ajax/counter_graph
+        Route::post('/ajax/counter_graph',['uses'=>'Ajax\CounterController@counter_graph','as'=>'counter_graph']);
+    });
 });
 
 Auth::routes();

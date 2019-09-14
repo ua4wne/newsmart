@@ -61,14 +61,18 @@
                             <td style="width:100px;">{!! Html::image($row->image,'{{ $row->image }}',['class'=>'img-responsive, img_mini']) !!}</td>
                         @endif
                         <td>{{ $row->uid}}</td>
-                        <td>{{ $row->name}}</td>
+                        @if($row->OptionCount())
+                            <td>{{ $row->name }} <span class="badge"> {{ $row->OptionCount() }}</span></td>
+                        @else
+                            <td>{{ $row->name }}</td>
+                        @endif
                         <td>{{ $row->type->name}}</td>
                         <td>{{ $row->descr}}</td>
                         <td>{{ $row->address}}</td>
                         @if($row->verify==0)
-                            <td><span class="label label-danger">Ручной</span></td>
+                            <td><span class="label label-warning">Ручной</span></td>
                         @else
-                            <td><span class="label label-success">Автоматический</span></td>
+                            <td><span class="label label-info">Автоматический</span></td>
                         @endif
                         @if($row->status==0)
                             <td><span class="label label-danger">Отключено</span></td>

@@ -213,7 +213,11 @@
                 <tbody>
                 @foreach($rows as $k => $row)
                     <tr>
-                        <td>{{ $row->name }}</td>
+                        @if($row->RuleCount())
+                            <td>{{ $row->name }} <span class="badge"> {{ $row->RuleCount() }}</span></td>
+                        @else
+                            <td>{{ $row->name }}</td>
+                        @endif
                         <td>{{ $row->alias}}</td>
                         <td>{{ $row->address}}</td>
                         <td>{{ $row->val}}</td>
@@ -251,6 +255,14 @@
         var myDatatable = $('#my_datatable').DataTable( {
             //"order": [[ 0, "desc" ]]
         } );
+
+        $('#alias').click(function(){
+            $('#name').val($("#alias option:selected").text());
+        });
+
+        $('#alias').blur(function(){
+            $('#name').val($("#alias option:selected").text());
+        });
 
         $("#new_btn").click(function (e) {
             e.preventDefault();

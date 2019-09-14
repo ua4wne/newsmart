@@ -15,4 +15,15 @@ class Option extends Model
     {
         return $this->belongsTo('App\Models\Device','device_id','id');
     }
+
+    public function rules()
+    {
+        return $this->hasMany('App\Models\Rule','option_id', 'id');
+    }
+
+    public function RuleCount()
+    {
+        $rule = $this->rules()->count('option_id');
+        return $rule;
+    }
 }
