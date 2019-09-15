@@ -95,6 +95,12 @@ Route::middleware(['auth'])->group(function(){
         Route::match(['get','post'],'/edit/{id?}',['uses'=>'MaterialController@edit','as'=>'materialEdit']);
         //materials/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\MaterialController@delete','as'=>'materialDel']);
+        //materials/ajax/getmaterials
+        Route::get('/ajax/getmaterials',['uses'=>'Ajax\MaterialController@ajaxData','as'=>'getMaterial']);
+        //materials/ajax/findimg
+        Route::post('/ajax/findimg',['uses'=>'Ajax\MaterialController@ajaxImg','as'=>'findImg']);
+        //materials/ajax/findcategory
+        Route::post('/ajax/findcategory',['uses'=>'Ajax\MaterialController@ajaxCategory','as'=>'findCategory']);
     });
     //devices/ группа обработки роутов devices
     Route::group(['prefix'=>'devices'], function(){
@@ -143,6 +149,17 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/ajax/add',['uses'=>'Ajax\CounterController@create','as'=>'counterAdd']);
         // counters/ajax/counter_graph
         Route::post('/ajax/counter_graph',['uses'=>'Ajax\CounterController@counter_graph','as'=>'counter_graph']);
+    });
+
+    //stocks/ группа обработки роутов stocks
+    Route::group(['prefix'=>'stocks'], function(){
+        Route::get('/',['uses'=>'StockController@index','as'=>'stock']);
+        //stocks/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\StockController@create','as'=>'stockAdd']);
+        //stocks/ajax/edit
+        Route::post('/ajax/edit',['uses'=>'Ajax\StockController@edit','as'=>'stockEdit']);
+        //stocks/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\StockController@delete','as'=>'stockDel']);
     });
 });
 

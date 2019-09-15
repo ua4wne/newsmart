@@ -29,4 +29,24 @@ class MaterialController extends Controller
             }
         }
     }
+
+    public function ajaxData(Request $request){
+        $query = $request->get('query','');
+        $firms = Material::where('name','LIKE','%'.$query.'%')->get();
+        return response()->json($firms);
+    }
+
+    public function ajaxImg(Request $request){
+        $name = $request->input('material');
+        if(empty($name)) return 'ERR';
+        $img = Material::where(['name'=>$name])->first()->image;
+        return $img;
+    }
+
+    public function ajaxCategory(Request $request){
+        $name = $request->input('material');
+        if(empty($name)) return 'ERR';
+        $category = Material::where(['name'=>$name])->first()->category->name;
+        return $category;
+    }
 }

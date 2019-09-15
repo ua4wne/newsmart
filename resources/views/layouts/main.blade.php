@@ -75,10 +75,15 @@
                                         <li><a href="{{ route('counter') }}">Счетчики</a></li>
                                     </ul>
                                 </li>
+                                <li><a><i class="fa fa-cubes"></i> Мой склад <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{{ route('stock') }}">Остатки</a></li>
+                                    </ul>
+                                </li>
                                 <li><a><i class="fa fa-bar-chart-o"></i> Отчеты <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="#">Расходы ЖКХ</a></li>
-                                        <li><a href="#">Карточка счета</a></li>
+                                        <li><a href="#">Критические остатки</a></li>
                                         <li><a href="#">Оборотно-сальдовая ведомость по счету</a></li>
                                     </ul>
                                 </li>
