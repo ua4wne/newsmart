@@ -20,6 +20,8 @@
 {{--    <link href="/css/buttons.bootstrap.min.css" rel="stylesheet">--}}
     <!-- Custom Theme Style -->
     <link href="/css/custom.min.css" rel="stylesheet">
+    <link href="/css/switchery.min.css" rel="stylesheet">
+
 </head>
 
 <body class="nav-md">
@@ -65,7 +67,7 @@
                                 </li>
                                 <li><a><i class="fa fa-wifi"></i> Коммуникации <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Отправка СМС</a></li>
+                                        <li><a href="{{ route('sms') }}">Отправка СМС</a></li>
                                         <li><a href="#">MQTT</a></li>
                                     </ul>
                                 </li>

@@ -161,6 +161,11 @@ Route::middleware(['auth'])->group(function(){
         //stocks/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\StockController@delete','as'=>'stockDel']);
     });
+
+    //sms/ группа обработки роутов sms
+    Route::group(['prefix'=>'sms'], function(){
+        Route::match(['get','post'],'/',['uses'=>'SmsController@index','as'=>'sms']);
+    });
 });
 
 Auth::routes();
