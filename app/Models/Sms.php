@@ -19,7 +19,7 @@ class Sms extends Model
         $this->api_id = SysConst::where(['param'=>'API_KEY_SMSRU'])->first()->val;
         if(empty($this->api_id)){
             $msg = "Не найдено значение константы API_KEY_SMSRU в настройках системы! Отправка смс не возможна.";
-        //    LibraryModel::AddEventLog('error',$msg);
+            event(new AddEventLogs('error',$msg));
             return 'ERR';
         }
         $smsru = new SMSRU($this->api_id); // Ваш уникальный программный ключ
@@ -41,7 +41,6 @@ class Sms extends Model
             event(new AddEventLogs('info',$msg));
         } else {
             $msg = 'В процессе отправки сообщения возникла ошибка! Код ошибки: <strong>' . $sms->status_code .'</strong>. Текст ошибки: '.$sms->status_text;
-            //Event::fire(new AddEventLogs('error',$msg));
             event(new AddEventLogs('error',$msg));
         }
         return $sms->status;
@@ -52,7 +51,6 @@ class Sms extends Model
         $this->api_id = SysConst::where(['param'=>'API_KEY_SMSRU'])->first()->val;
         if(empty($this->api_id)){
             $msg = "Не найдено значение константы API_KEY_SMSRU в настройках системы! Отправка смс не возможна.";
-            //Event::fire(new AddEventLogs('error',$msg));
             event(new AddEventLogs('error',$msg));
             return 'ERR';
         }
@@ -73,13 +71,11 @@ class Sms extends Model
             }
             $msg = "Общая стоимость: $request->total_cost руб.";
             $msg.= " Общая длина СМС: $request->total_sms ";
-            //Event::fire(new AddEventLogs('info',$msg));
             event(new AddEventLogs('info',$msg));
         } else {
             $msg = "Ошибка при выполнении запроса стоимости. ";
             $msg.= "Код ошибки: <strong>$request->status_code</strong>. ";
             $msg.= " Текст ошибки: $request->status_text. ";
-            //Event::fire(new AddEventLogs('error',$msg));
             event(new AddEventLogs('error',$msg));
             $request->status;
         }
@@ -111,7 +107,6 @@ class Sms extends Model
         $this->api_id = SysConst::where(['param'=>'API_KEY_SMSRU'])->first()->val;
         if(empty($this->api_id)){
             $msg = "Не найдено значение константы API_KEY_SMSRU в настройках системы! Отправка смс не возможна.";
-            //Event::fire(new AddEventLogs('error',$msg));
             event(new AddEventLogs('error',$msg));
             return 'ERR';
         }
@@ -120,7 +115,6 @@ class Sms extends Model
         $request = $smsru->getBalance();
 
         if ($request->status == "OK") { // Запрос выполнен успешно
-            //Event::fire(new AddEventLogs('info', 'Ваш баланс:' . $request->balance));
             event(new AddEventLogs('info','Ваш баланс:' . $request->balance));
         } else {
             event(new AddEventLogs('error', 'Ошибка при выполнении запроса.! Код ошибки: ' . $request->status_code .'<br>Текст ошибки: '.$request->status_text));
