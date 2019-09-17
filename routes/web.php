@@ -150,7 +150,6 @@ Route::middleware(['auth'])->group(function(){
         // counters/ajax/counter_graph
         Route::post('/ajax/counter_graph',['uses'=>'Ajax\CounterController@counter_graph','as'=>'counter_graph']);
     });
-
     //stocks/ группа обработки роутов stocks
     Route::group(['prefix'=>'stocks'], function(){
         Route::get('/',['uses'=>'StockController@index','as'=>'stock']);
@@ -161,10 +160,13 @@ Route::middleware(['auth'])->group(function(){
         //stocks/ajax/del
         Route::post('/ajax/del',['uses'=>'Ajax\StockController@delete','as'=>'stockDel']);
     });
-
     //sms/ группа обработки роутов sms
     Route::group(['prefix'=>'sms'], function(){
         Route::match(['get','post'],'/',['uses'=>'SmsController@index','as'=>'sms']);
+    });
+    //mqtt/ группа обработки роутов mqtt
+    Route::group(['prefix'=>'mqtt'], function(){
+        Route::match(['get','post'],'/',['uses'=>'MqttController@index','as'=>'mqtt']);
     });
 });
 

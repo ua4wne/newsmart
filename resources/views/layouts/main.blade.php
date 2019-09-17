@@ -68,7 +68,7 @@
                                 <li><a><i class="fa fa-wifi"></i> Коммуникации <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
                                         <li><a href="{{ route('sms') }}">Отправка СМС</a></li>
-                                        <li><a href="#">MQTT</a></li>
+                                        <li><a href="{{ route('mqtt') }}">MQTT</a></li>
                                     </ul>
                                 </li>
                                 <li><a><i class="fa fa-calculator"></i> Учет ЖКУ <span class="fa fa-chevron-down"></span></a>
