@@ -29,7 +29,7 @@
                     <h4 class="modal-title">Настройка подключения к серверу MQTT</h4>
                 </div>
                 <div class="modal-body">
-                    {!! Form::open(['url' => '#','class'=>'form-horizontal','method'=>'POST','id'=>'new_connect']) !!}
+                    {!! Form::open(['url' => '#', 'class'=>'form-horizontal','method'=>'POST','id'=>'new_connect']) !!}
 
                     <div class="form-group">
                         {!! Form::label('server','Сервер:',['class' => 'col-xs-3 control-label'])   !!}
@@ -53,9 +53,9 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('pass','Логин:',['class' => 'col-xs-3 control-label'])   !!}
+                        <label class="col-xs-3 control-label" for="mpass">Пароль</label>
                         <div class="col-xs-9">
-                            {!! Form::password('pass',['class' => 'form-control','placeholder'=>'Введите пароль','required'=>'','maxlength'=>'15','id' => 'mpass']) !!}
+                            <input type="password" id="mpass" class="form-control" name="pass" value="{{ $pass }}" required="required" maxlength="15">
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" id="new_connect">Сохранить</button>
+                    <button type="button" class="btn btn-primary" id="btn_connect">Сохранить</button>
                 </div>
             </div>
         </div>
@@ -168,5 +168,56 @@
 @section('user_script')
     <script src="/js/mqttws31.js"></script>
     <script src="/js/mqtt.js"></script>
+
+    <script>
+        $("#btn_connect").click(function (e) {
+            e.preventDefault();
+            var error=0;
+
+            $("#new_connect").find(":input").each(function() {// проверяем каждое поле ввода в форме
+                if($(this).attr("required")=='required'){ //обязательное для заполнения поле формы?
+                    if(!$(this).val()){// если поле пустое
+                        $(this).css('border', '1px solid red');// устанавливаем рамку красного цвета
+                        error=1;// определяем индекс ошибки
+                    }
+                    else{
+                        $(this).css('border', '1px solid green');// устанавливаем рамку зеленого цвета
+                    }
+
+                }
+            })
+            if(error){
+                alert("Необходимо заполнять все доступные поля!");
+                return false;
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('mqttConnect') }}',
+                    data: $('#new_connect').serialize(),
+                    success: function(res){
+                        //alert(res);
+                        if ($.isEmptyObject(res.error)) {
+                            if (res == 'ERR')
+                                alert('Ошибка обновления данных!');
+                            else {
+                                window.location.reload();
+                            }
+                        } else {
+                            $(".print-error-msg").find("ul").html('');
+                            $(".print-error-msg").css('display', 'block');
+                            $.each(res.error, function (key, value) {
+                                $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+                            });
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+            }
+        });
+    </script>
 
 @endsection

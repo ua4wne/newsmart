@@ -166,7 +166,9 @@ Route::middleware(['auth'])->group(function(){
     });
     //mqtt/ группа обработки роутов mqtt
     Route::group(['prefix'=>'mqtt'], function(){
-        Route::match(['get','post'],'/',['uses'=>'MqttController@index','as'=>'mqtt']);
+        Route::get('/',['uses'=>'MqttController@index','as'=>'mqtt']);
+        //mqtt/ajax/add
+        Route::post('/ajax/add',['uses'=>'Ajax\MqttController@connect','as'=>'mqttConnect']);
     });
 });
 

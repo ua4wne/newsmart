@@ -7,27 +7,11 @@ use App\Models\Option;
 use App\Models\SysConst;
 use App\Models\Topic;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Validator;
 
 class MqttController extends Controller
 {
-    public function index(Request $request){
-        if($request->isMethod('post')){
-            $input = $request->except('_token'); //параметр _token нам не нужен
-            $messages = [
-                'required' => 'Поле :attribute обязательно к заполнению',
-                'string' => 'Поле :attribute должно быть строкой',
-            ];
-            $validator = Validator::make($input,[
-                'phone' => 'required|string|max:12',
-                'message' => 'required|string|max:255',
-            ],$messages);
-            if($validator->fails()){
-                return redirect()->route('sms')->withErrors($validator)->withInput();
-            }
-
-        }
+    public function index(){
         //определяем наличие констант для подключения к серверу MQTT
         $server = SysConst::where(['param'=>'MQTT_SERVER'])->first()->val;
         $port = SysConst::where(['param'=>'MQTT_PORT'])->first()->val;
