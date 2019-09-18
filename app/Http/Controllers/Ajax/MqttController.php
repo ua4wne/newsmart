@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\AddEventLogs;
+use App\Models\MqttData;
+use App\Models\Option;
 use App\Models\SysConst;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
@@ -80,6 +83,67 @@ class MqttController extends Controller
                 return 'ERR';
             }
             return response()->json(['error' => $validator->errors()->all()]);
+        }
+    }
+
+    public function add_topic(Request $request) {
+        if ($request->isMethod('post')) {
+            $messages = [
+                'required' => 'Поле :attribute обязательно к заполнению',
+                'numeric' => 'Поле :attribute должно иметь числовое или дробное значение',
+                'string' => 'Поле :attribute должно иметь строковое значение',
+            ];
+            $validator = Validator::make($request->all(), [
+                'topic_id' => 'required|numeric',
+                'option_id' => 'required|numeric',
+                'route' => 'required|string|max:10',
+            ], $messages);
+            if ($validator->passes()) {
+                $input = $request->except('_token'); //параметр _token нам не нужен
+                $dbl = Topic::where(['topic_id'=>$input['topic_id'],'route'=>$input['route']])->first();
+                if(empty($dbl)){
+                    $model = new Topic();
+                    $input['created_at'] = date('Y-m-d H:i:s');
+                    $model->fill($input);
+                    if($model->save())
+                        return $model->id;
+                }
+                else{
+                    return 'DBL';
+                }
+            }
+        }
+    }
+
+    public function newmsg(Request $request){
+        if ($request->isMethod('post')) {
+            $input = $request->except('_token'); //параметр _token нам не нужен
+            $data = MqttData::find(['topic'=>$input['name']]);
+            $topic = Topic::find(['topic_id'=>$data->id]);
+            if(!empty($topic)){
+                //есть такой топик, обновляем связанный параметр
+                $option = Option::find($topic->option_id);
+                if(!empty($option)){
+                    $option->val = $input['payload'];
+                    $option->save();
+                }
+                return 'OK';
+            }
+            else{
+                return 'NO';
+            }
+        }
+    }
+
+    public function delete(Request $request){
+        if ($request->isMethod('post')) {
+            $input = $request->except('_token'); //параметр _token нам не нужен
+            $id=$input['id'];
+            return $id;
+            if (($model = Topic::find($id)) !== null){
+                $model->delete();
+                return 'OK';
+            }
         }
     }
 }

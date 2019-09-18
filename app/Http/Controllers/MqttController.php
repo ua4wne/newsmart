@@ -19,13 +19,11 @@ class MqttController extends Controller
         $pass = SysConst::where(['param'=>'MQTT_PASSWORD'])->first()->val;
         $subquery = Topic::select('option_id')->get();
         $options = Option::select(['id','device_id', 'name'])->whereNotIn('id', $subquery)->get(); //выбираем только то, что еще не связано
-        //$options = DB::table('options')->select(['id','device_id', 'name'])->whereNotIn('id', $subquery)->get();
         $selopt = array();
         foreach ($options as $option){
             $selopt[$option->id] = $option->device->name.' ('.$option->name.') - '.$option->device->location->name;
         }
         $subquery = Topic::select('topic_id')->get();
-        //$topics = DB::table('mqtt_data')->select(['id', 'topic'])->whereNotIn('id',$subquery)->get(); //выбираем только то, что еще не связано
         $topics = MqttData::select(['id','topic'])->whereNotIn('id', $subquery)->get(); //выбираем только то, что еще не связано
         $seltop = array();
         foreach ($topics as $val){
@@ -58,7 +56,6 @@ class MqttController extends Controller
                 'seltop' => $seltop,
                 'public' => $public,
                 'subscribe' => $subscribe,
-                'accepted' => '',
             ];
             return view('mqtt', $data);
         }

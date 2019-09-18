@@ -169,6 +169,12 @@ Route::middleware(['auth'])->group(function(){
         Route::get('/',['uses'=>'MqttController@index','as'=>'mqtt']);
         //mqtt/ajax/add
         Route::post('/ajax/add',['uses'=>'Ajax\MqttController@connect','as'=>'mqttConnect']);
+        //mqtt/ajax/add/topic
+        Route::post('/ajax/add_topic',['uses'=>'Ajax\MqttController@add_topic','as'=>'addTopic']);
+        //mqtt/ajax/msg
+        Route::post('/ajax/msg',['uses'=>'Ajax\MqttController@newmsg','as'=>'mqttMsg']);
+        //mqtt/ajax/del
+        Route::post('/ajax/del_topic',['uses'=>'Ajax\MqttController@delete','as'=>'delTopic']);
     });
 });
 
