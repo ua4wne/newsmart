@@ -406,6 +406,7 @@
                     type: "POST",
                     data: {id:id},
                     url: "{{ route('delTopic') }}",
+                    dataType: "json",
                     // success - это обработчик удачного выполнения событий
                     success: function(resp) {
                         //alert("Сервер вернул вот что: " + resp);
@@ -435,6 +436,7 @@
                     type: "POST",
                     data: {id:id},
                     url: "{{ route('delTopic') }}",
+                    dataType: "json",
                     // success - это обработчик удачного выполнения событий
                     success: function(resp) {
                         alert("Сервер вернул вот что: " + resp);
