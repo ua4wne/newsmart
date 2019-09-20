@@ -139,7 +139,6 @@ class MqttController extends Controller
         if ($request->isMethod('post')) {
             $input = $request->except('_token'); //параметр _token нам не нужен
             $id=$input['id'];
-            return $id;
             if (($model = Topic::find($id)) !== null){
                 $model->delete();
                 return 'OK';

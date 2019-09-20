@@ -62,11 +62,13 @@ class LibraryController extends Controller
         $resipients = explode(",",$resp);
         $ph = SysConst::where(['param'=>'CONTROL_PHONE'])->first()->val;
         $phones = explode(",",$ph);
-        //ищем связанные правила
-        $rules = Rule::where(['option_id'=>$model->id])->get();
+        //ищем связанные активные правила
+        $rules = Rule::where(['option_id'=>$model->id,'state'=>'1'])->get();
         foreach ($rules as $rule){
             if(!empty($rule->runtime))
                 $runtime = strtotime($rule->runtime); //получаем метку времени старта правила
+            else
+                $runtime = strtotime(date('Y-m-d H:i:s'));
             if($time_stamp < $runtime) continue; //время еще не вышло, пропуск правила
             if(($model->val > $rule->val) && $rule->condition == 'more'){
                 if($rule->action == 'mail'){
@@ -95,10 +97,11 @@ class LibraryController extends Controller
             }
             elseif(($model->val < $rule->val) && $rule->condition == 'less'){
                 if($rule->action == 'mail'){
+                    $device = $model->device->name;
                     foreach ($resipients as $resipient){
                         $msg = str_replace("#LOCATION#",$location,$rule->text);
                         $msg = str_replace("#VAL#",$model->val . $model->unit,$msg);
-                        self::SendMail($resipient, $msg);
+                        self::SendMail($resipient, $msg,$device,$location);
                     }
                 }
                 if($rule->action == 'sms'){
@@ -119,10 +122,11 @@ class LibraryController extends Controller
             }
             elseif(($rule->val == $model->val) && $rule->condition == 'equ'){
                 if($rule->action == 'mail'){
+                    $device = $model->device->name;
                     foreach ($resipients as $resipient){
                         $msg = str_replace("#LOCATION#",$location,$rule->text);
                         $msg = str_replace("#VAL#",$model->val . $model->unit,$msg);
-                        self::SendMail($resipient, $msg);
+                        self::SendMail($resipient, $msg,$device,$location);
                     }
                 }
                 if($rule->action == 'sms'){
@@ -143,10 +147,11 @@ class LibraryController extends Controller
             }
             elseif(($rule->val != $model->val) && $rule->condition == 'not'){
                 if($rule->action == 'mail'){
+                    $device = $model->device->name;
                     foreach ($resipients as $resipient){
                         $msg = str_replace("#LOCATION#",$location,$rule->text);
                         $msg = str_replace("#VAL#",$model->val . $model->unit,$msg);
-                        self::SendMail($resipient, $msg);
+                        self::SendMail($resipient, $msg,$device,$location);
                     }
                 }
                 if($rule->action == 'sms'){

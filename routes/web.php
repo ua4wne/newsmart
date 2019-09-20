@@ -12,7 +12,7 @@
 */
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
-//Route::get('/{params}',['uses'=>'ControlController@index','as'=>'control']);
+Route::get('/control', ['uses' => 'ControlController@index']);
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', 'MainController@index')->name('main');

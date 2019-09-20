@@ -21,7 +21,8 @@ class CreateRulesTable extends Migration
             $table->float('val');
             $table->string('action',5);
             $table->text('text');
-            $table->enum('runtime',[0,1])->default(0);
+            $table->dateTime('runtime')->nullable();
+            $table->enum('state',[0,1])->default(0);
             $table->integer('step');
             $table->timestamps();
         });

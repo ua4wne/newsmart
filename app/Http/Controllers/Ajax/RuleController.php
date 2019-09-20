@@ -25,7 +25,7 @@ class RuleController extends Controller
                 'action' => 'required|string',
                 'text' => 'required|string',
                 'step' => 'required|numeric',
-                'runtime' => 'required|in:0,1',
+                'state' => 'required|in:0,1',
             ], $messages);
             if ($validator->passes()) {
                 $input = $request->except('_token'); //параметр _token нам не нужен
@@ -59,7 +59,7 @@ class RuleController extends Controller
                 'action' => 'required|string',
                 'text' => 'required|string',
                 'step' => 'required|numeric',
-                'runtime' => 'required|in:0,1',
+                'state' => 'required|in:0,1',
             ], $messages);
             if ($validator->passes()) {
                 $input = $request->except('_token'); //параметр _token нам не нужен
@@ -68,7 +68,7 @@ class RuleController extends Controller
                 $model->val = $input['val'];
                 $model->action = $input['action'];
                 $model->text = $input['text'];
-                $model->runtime = $input['runtime'];
+                $model->state = $input['state'];
                 $model->step = $input['step'];
                 if ($model->save()) {
                     return 'OK';

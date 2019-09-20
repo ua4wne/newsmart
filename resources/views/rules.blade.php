@@ -69,9 +69,9 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('runtime', 'Состояние:',['class'=>'col-xs-3 control-label']) !!}
+                        {!! Form::label('state', 'Состояние:',['class'=>'col-xs-3 control-label']) !!}
                         <div class="col-xs-9">
-                            {!! Form::select('runtime', array('0'=>'Отключено','1'=>'Включено'), old('runtime'),['class' => 'form-control','id'=>'runtime']); !!}
+                            {!! Form::select('state', array('0'=>'Отключено','1'=>'Включено'), old('state'),['class' => 'form-control','id'=>'state']); !!}
                         </div>
                     </div>
 
@@ -133,9 +133,9 @@
                     </div>
 
                     <div class="form-group">
-                        {!! Form::label('runtime', 'Состояние:',['class'=>'col-xs-3 control-label']) !!}
+                        {!! Form::label('state', 'Состояние:',['class'=>'col-xs-3 control-label']) !!}
                         <div class="col-xs-9">
-                            {!! Form::select('runtime', array('0'=>'Отключено','1'=>'Включено'), old('runtime'),['class' => 'form-control','id'=>'eruntime']); !!}
+                            {!! Form::select('state', array('0'=>'Отключено','1'=>'Включено'), old('state'),['class' => 'form-control','id'=>'estate']); !!}
                         </div>
                     </div>
 
@@ -180,8 +180,9 @@
                     <th>Значение</th>
                     <th>Действие</th>
                     <th>Текст сообщения (команда)</th>
-                    <th>Статус</th>
+                    <th>Время запуска</th>
                     <th>Период, сек.</th>
+                    <th>Состояние</th>
                     <th>Действия</th>
                 </tr>
                 </thead>
@@ -192,12 +193,13 @@
                         <td>{{ $row->val}}</td>
                         <td>{{ $row->action}}</td>
                         <td>{{ $row->text}}</td>
-                        @if($row->runtime==0)
+                        <td>{{ $row->runtime}}</td>
+                        <td>{{ $row->step}}</td>
+                        @if($row->state==0)
                             <td><span class="label label-danger">Отключено</span></td>
                         @else
                             <td><span class="label label-success">Включено </span></td>
                         @endif
-                        <td>{{ $row->step}}</td>
                         <td style="width:100px;">
                             <div class="form-group" role="group" id="{{ $row->id }}">
                                 <button class="btn btn-success btn-sm val_edit" type="button" data-toggle="modal" data-target="#editVal" title="Редактировать запись"><i class="fa fa-edit" aria-hidden="true"></i></button>
@@ -227,8 +229,8 @@
             e.preventDefault();
             var error=0;
             var row = '';
-            var rtime = '<span class="label label-danger">Отключено</span>';
-            if($('#runtime').val()==1) rtime = '<span class="label label-success">Включено </span>';
+            var state = '<span class="label label-danger">Отключено</span>';
+            if($('#state').val()==1) state = '<span class="label label-success">Включено </span>';
 
             $("#new_val").find(":input").each(function() {// проверяем каждое поле ввода в форме
                 if($(this).attr("required")=='required'){ //обязательное для заполнения поле формы?
@@ -262,8 +264,9 @@
                                     $('#val').val(),
                                     $('#action').val(),
                                     $('#text').val(),
-                                    rtime,
+                                    '',
                                     $('#step').val(),
+                                    state,
                                     res
                                 ]).draw();
                                 $('#val').val('');
@@ -291,8 +294,8 @@
         $('#edit_btn').click(function(e){
             e.preventDefault();
             var error=0;
-            var rtime = 'Отключено';
-            if($('#eruntime').val()==1) rtime = 'Включено';
+            var state = 'Отключено';
+            if($('#estate').val()==1) state = 'Включено ';
             $("#edit_val").find(":input").each(function() {// проверяем каждое поле ввода в форме
                 if($(this).attr("required")=='required'){ //обязательное для заполнения поле формы?
                     if(!$(this).val()){// если поле пустое
@@ -322,12 +325,13 @@
                             else {
                                 $(".modal").modal("hide");
                                 $(".print-error-msg").css('display', 'none');
-                                row.prevAll().eq(5).text($('#econdition').val());
-                                row.prevAll().eq(4).text($('#eval').val());
-                                row.prevAll().eq(3).text($('#eaction').val());
-                                row.prevAll().eq(2).text($('#etext').val());
-                                row.prevAll().eq(1).text(rtime);
-                                row.prevAll().eq(0).text($('#estep').val());
+                                row.prevAll().eq(6).text($('#econdition').val());
+                                row.prevAll().eq(5).text($('#eval').val());
+                                row.prevAll().eq(4).text($('#eaction').val());
+                                row.prevAll().eq(3).text($('#etext').val());
+                                row.prevAll().eq(2).text();
+                                row.prevAll().eq(1).text($('#estep').val());
+                                row.prevAll().eq(0).text(state);
                             }
                         } else {
                             $(".print-error-msg").find("ul").html('');
@@ -347,13 +351,13 @@
 
         $(document).on ({
             click: function() {
-                var id = $(this).parent().attr("id");
-                var cond = $(this).parent().parent().prevAll().eq(5).text();
-                var eval = $(this).parent().parent().prevAll().eq(4).text();
-                var action = $(this).parent().parent().prevAll().eq(3).text();
-                var text = $(this).parent().parent().prevAll().eq(2).text();
-                var rtime = $(this).parent().parent().prevAll().eq(1).text();
-                var step = $(this).parent().parent().prevAll().eq(0).text();
+                let id = $(this).parent().attr("id");
+                let cond = $(this).parent().parent().prevAll().eq(6).text();
+                let eval = $(this).parent().parent().prevAll().eq(5).text();
+                let action = $(this).parent().parent().prevAll().eq(4).text();
+                let text = $(this).parent().parent().prevAll().eq(3).text();
+                let step = $(this).parent().parent().prevAll().eq(1).text();
+                let state = $(this).parent().parent().prevAll().eq(0).text();
 
                 $('#eval').val(eval);
                 $('#etext').val(text);
@@ -365,15 +369,17 @@
                 $('#eaction option:selected').each(function(){
                     this.selected=false;
                 });
-                $('#eruntime option:selected').each(function(){
+                $('#estate option:selected').each(function(){
                     this.selected=false;
                 });
 
-                $("#econdition :contains("+cond+")").attr("selected", "selected");
-                //$("#eaction :contains("+action+")").attr("selected", "selected");
-                $("#eaction option[value='"+action+"']").attr("selected", "selected");
-                $("#eruntime :contains("+rtime+")").attr("selected", "selected");
-//alert(action);
+                $('#econdition option[value='+cond+']').prop('selected', true);
+                $('#eaction option[value='+action+']').prop('selected', true);
+                if(state=="Включено ")
+                    $('#estate option[value=1]').prop('selected', true);
+                else
+                    $('#estate option[value=0]').prop('selected', true);
+
                 $('#id_val').val(id);
                 row = $(this).parent().parent();
             }

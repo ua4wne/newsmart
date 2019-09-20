@@ -8,7 +8,7 @@ class Rule extends Model
 {
     protected $table = 'rules';
 
-    protected $fillable = ['option_id','condition','val','action','text','runtime','step'];
+    protected $fillable = ['option_id','condition','val','action','text','state','step'];
 
     public function option()
     {

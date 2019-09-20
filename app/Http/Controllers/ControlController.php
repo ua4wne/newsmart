@@ -18,20 +18,21 @@ class ControlController extends Controller
             $uid = $request['device']; //выделяем UID устройства из запроса и смотрим, есть ли такой в базе
             $device = Device::where(['uid'=>$uid])->first();
             if(!empty($device)){ //есть такое устройство, парсим дальше, выбираем остальные параметры
-                //return print_r($_GET);
-                $params = $request->query->all();
-                foreach($params as $key=>$value){
-                    if($key!='device'){
-                        if(is_array($value)){ //если массив параметров
-                            //dd($value);
-                            foreach($value as $k=>$param){
-                                $this->CheckParam($device,$key,$param,$k);
+                if($device->status == '1') { //если устройство активно
+                    $params = $request->query->all();
+                    foreach($params as $key=>$value){
+                        if($key!='device'){
+                            if(is_array($value)){ //если массив параметров
+                                //dd($value);
+                                foreach($value as $k=>$param){
+                                    $this->CheckParam($device,$key,$param,$k);
+                                }
                             }
-                        }
-                        else {
-                            $this->CheckParam($device,$key,$value);
-                        }
+                            else {
+                                $this->CheckParam($device,$key,$value);
+                            }
 
+                        }
                     }
                 }
             }
@@ -39,7 +40,7 @@ class ControlController extends Controller
         if(view()->exists('empty')){
             return view('empty');
         }
-        abort(404);
+        //abort(404);
     }
 
     private function CheckParam(Device $device,$key,$value,$address=null){

@@ -404,7 +404,7 @@
                 mqtt.unsubscribe(utopic);
                 $.ajax({
                     type: "POST",
-                    data: {id:id},
+                    data: {"id":id,"_token": "{{ csrf_token() }}",},
                     url: "{{ route('delTopic') }}",
                     dataType: "json",
                     // success - это обработчик удачного выполнения событий
@@ -434,12 +434,11 @@
                 mqtt.unsubscribe(stopic);
                 $.ajax({
                     type: "POST",
-                    data: {id:id},
+                    data: {"id":id,"_token": "{{ csrf_token() }}",},
                     url: "{{ route('delTopic') }}",
-                    dataType: "json",
                     // success - это обработчик удачного выполнения событий
                     success: function(resp) {
-                        alert("Сервер вернул вот что: " + resp);
+                        //alert("Сервер вернул вот что: " + resp);
                         if(resp=='OK'){
                             var idx = ".sub:contains(" + stopic + ")";
                             var count = $(idx).size();

@@ -95,6 +95,7 @@ class DeviceController extends Controller
 
     public function edit(Request $request,$id=null){
         $model = Device::find($id);
+        $old = $model; //сохраняем в массиве предыдущие значения полей модели
         if($request->isMethod('post')){
             $input = $request->except('_token'); //параметр _token нам не нужен
             $messages = [
@@ -102,10 +103,9 @@ class DeviceController extends Controller
                 'integer' => 'Поле :attribute должно иметь цифровое значение',
                 'mimes' => 'К загрузке допускаются только файлы jpeg,png и bmp',
                 'in' => 'Поле :attribute должно иметь значение 0 или 1',
-                'unique' => 'Поле :attribute должно быть уникальным',
             ];
             $validator = Validator::make($input,[
-                'uid' => 'required|unique:devices|max:16',
+                'uid' => 'required|max:16',
                 'name' => 'required|max:70',
                 'address' => 'max:32',
                 'verify' => 'required|in:0,1',
@@ -139,7 +139,6 @@ class DeviceController extends Controller
                 return redirect('devices')->with('status',$msg);
             }
         }
-        $old = $model->toArray(); //сохраняем в массиве предыдущие значения полей модели Currency
         if(view()->exists('config.deviceEdit')){
             //выбираем все протоколы
             $prots = Protocol::all();
