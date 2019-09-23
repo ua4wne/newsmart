@@ -181,7 +181,7 @@ class LibraryController extends Controller
         //запись в лог
         if($result){
             $msg = 'Сообщение получателю '. $to .' отправлено!';
-            event(new AddEventLogs('mail',$msg));
+            event(new AddEventLogs('info',$msg));
         }
         else{
             $msg = 'Возникла ошибка при отправке системного сообщения адресату <strong>'. $to .'</strong>';

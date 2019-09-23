@@ -177,6 +177,20 @@ Route::middleware(['auth'])->group(function(){
         //mqtt/ajax/del
         Route::post('/ajax/del_topic',['uses'=>'Ajax\MqttController@delete','as'=>'delTopic']);
     });
+    //requests/ группа обработки роутов requests
+    Route::group(['prefix'=>'requests'], function(){
+        Route::get('/',['uses'=>'RequestController@index','as'=>'view_request']);
+        //requests/ajax/del
+        Route::post('/ajax/del',['uses'=>'Ajax\RequestController@delete','as'=>'requestDel']);
+        //requests/ajax/debug
+        Route::post('/ajax/debug',['uses'=>'Ajax\RequestController@debug','as'=>'debug']);
+    });
+    //eventlogs/ группа обработки роутов eventlogs
+    Route::group(['prefix'=>'eventlogs'], function(){
+        Route::match(['get','post'],'/',['uses'=>'EventLogController@index','as'=>'eventlog']);
+        //eventlogs/ajax/read
+        Route::post('/ajax/read',['uses'=>'Ajax\EventLogController@read','as'=>'readLog']);
+    });
 });
 
 Auth::routes();

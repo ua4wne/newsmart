@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventlogsTable extends Migration
+class CreateLoggerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateEventlogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('eventlogs', function (Blueprint $table) {
+        Schema::create('logger', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type',10);
-            $table->text('msg');
-            $table->enum('stat',[0,1])->default(0);
+            $table->integer('option_id')->unsigned();
+            $table->foreign('option_id')->references('id')->on('options');
+            $table->float('val');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateEventlogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('eventlogs');
+        Schema::dropIfExists('logger');
     }
 }

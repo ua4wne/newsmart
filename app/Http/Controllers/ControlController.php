@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Events\AddEventLogs;
 use App\Http\Controllers\Lib\LibraryController;
 use App\Models\Device;
+use App\Models\GetDate;
 use App\Models\Option;
 use App\Models\Rule;
+use App\Models\SysConst;
 use Illuminate\Http\Request;
 
 class ControlController extends Controller
@@ -15,6 +17,14 @@ class ControlController extends Controller
     public function index(Request $request) //http://smart/control?device=70ed8b0cc057d9dd&celsio[one]=14.50&celsio[two]=51.00$addr[one]=402552162517723541$addr[two]=4025522324177235247
     {
         if($request->isMethod('get')){
+            //какой режим установлен?
+            $debug = SysConst::where(['param'=>'USE_GET_DEBUG'])->first()->val;
+            if($debug=='true'){
+                $log = new GetDate();
+                $log->created_at = date('Y-m-d H:i:s');
+                $log->request = $request->getRequestUri();
+                $log->save();
+            }
             $uid = $request['device']; //выделяем UID устройства из запроса и смотрим, есть ли такой в базе
             $device = Device::where(['uid'=>$uid])->first();
             if(!empty($device)){ //есть такое устройство, парсим дальше, выбираем остальные параметры

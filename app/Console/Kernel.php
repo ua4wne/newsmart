@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        'App\Console\Commands\GetWeather',
+        'App\Console\Commands\Logger',
     ];
 
     /**
@@ -24,8 +25,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // artisan command method
+        $schedule->command('weather:file')->hourly(); //каждый час запрашиваем данные погоды
+        $schedule->command('logger:save')->everyMinute(); //каждую минуту находим переменные, значения которых необходимо писать в лог
+        $schedule->command('topic:save')->everyMinute(); //каждую минуту обработчик данных, поступающих из топиков mqtt
     }
 
     /**
