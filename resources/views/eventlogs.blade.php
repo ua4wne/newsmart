@@ -52,7 +52,7 @@
                             @else
                                 <td class="text-center"><i class="fa fa-envelope-open-o green" aria-hidden="true"></i></td>
                             @endif
-                        <td>{{ $row->msg }}</td>
+                        <td>{!! $row->msg !!}</td>
                         <td>{{ $row->created_at }}</td>
                     </tr>
                 @endforeach

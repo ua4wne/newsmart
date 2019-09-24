@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\SysConst;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class CleanLog extends Command
 {
@@ -11,14 +13,14 @@ class CleanLog extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'eventlog:clean';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Delete events older more then X days';
 
     /**
      * Create a new command instance.
@@ -37,6 +39,12 @@ class CleanLog extends Command
      */
     public function handle()
     {
-        //
+        $period = SysConst::where(['param'=>'CLEANING_PERIOD'])->first()->val;
+        if(!empty($period)){
+            $date =  (new \DateTime('-'.$period.' days'))->format('Y-m-d');
+            //очищаем eventlog
+            if($period > 0)
+                DB::table('eventlogs')->where('created_at', '<=', $date)->delete();
+        }
     }
 }

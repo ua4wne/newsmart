@@ -15,6 +15,10 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\GetWeather',
         'App\Console\Commands\Logger',
+        'App\Console\Commands\Topics',
+        'App\Console\Commands\CleanLog',
+        'App\Console\Commands\CheckFail',
+        'App\Console\Commands\SysState',
     ];
 
     /**
@@ -29,6 +33,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('weather:file')->hourly(); //каждый час запрашиваем данные погоды
         $schedule->command('logger:save')->everyMinute(); //каждую минуту находим переменные, значения которых необходимо писать в лог
         $schedule->command('topic:save')->everyMinute(); //каждую минуту обработчик данных, поступающих из топиков mqtt
+        $schedule->command('eventlog:clean')->daily(); //каждый день запускаем задачу очистки журнала событий
+        $schedule->command('check:fail')->dailyAt('07:00'); //каждый день в 7:00 запускаем задачу проверки параметров, данные которых не обновляются более суток
+        $schedule->command('system:state')->dailyAt('07:30'); //каждый день в 7:30 шлем сообщение о загруженности системы
     }
 
     /**
