@@ -74,18 +74,18 @@ class SysState extends Command
         $uptime = str_replace('minutes','m',$uptime);
         $to = SysConst::where(['param'=>'CONTROL_E_MAIL'])->first()->val;
         if(!empty($to)){
-            $result = Mail::send('emails.sys_state', array('uptime'=>$uptime,'upload'=>$load,'content'=>$content), function($message) use ($to)
+            Mail::send('emails.sys_state', array('uptime'=>$uptime,'upload'=>$load,'content'=>$content), function($message) use ($to)
             {
                 $message->to($to)->subject('Состояние системы на  ' . date('Y-m-d H:i:s'));
             });
             //запись в лог
-            if($result){
-                $msg = 'Сообщение получателю '. $to .' отправлено!';
-                event(new AddEventLogs('info',$msg));
-            }
-            else{
+            if(count(Mail::failures()) > 0){
                 $msg = 'Возникла ошибка при отправке ежедневного сообщения о состоянии системы адресату <strong>'. $to .'</strong>';
                 event(new AddEventLogs('error',$msg));
+            }
+            else{
+                $msg = 'Сообщение о состоянии системы было отправлено получателю '. $to;
+                event(new AddEventLogs('info',$msg));
             }
         }
     }

@@ -174,18 +174,18 @@ class LibraryController extends Controller
     }
 
     public static function SendMail($to,$msg,$device,$location){
-        $result = Mail::send('emails.event', array('device'=>$device,'location'=>$location,'msg'=>$msg), function($message) use ($to)
+        Mail::send('emails.event', array('device'=>$device,'location'=>$location,'msg'=>$msg), function($message) use ($to)
         {
             $message->to($to)->subject('Сообщение системы');
         });
         //запись в лог
-        if($result){
-            $msg = 'Сообщение получателю '. $to .' отправлено!';
-            event(new AddEventLogs('info',$msg));
-        }
-        else{
+        if(count(Mail::failures()) > 0){
             $msg = 'Возникла ошибка при отправке системного сообщения адресату <strong>'. $to .'</strong>';
             event(new AddEventLogs('error',$msg));
+        }
+        else{
+            $msg = 'Сообщение получателю '. $to .' отправлено!';
+            event(new AddEventLogs('info',$msg));
         }
     }
 

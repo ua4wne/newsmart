@@ -17,7 +17,7 @@ class OptionController extends Controller
             $params = ['state'=>'Состояние','celsio'=>'Температура','humidity'=>'Влажность', 'pressure'=>'Давление',
                 'light'=>'Освещенность', 'alarm'=>'Контроль', 'rssi'=>'Уровень сигнала', 'power'=>'Мощность', 'vcc'=>'Напряжение питания', 'acdc'=>'Напряжение сети','current'=>'Сила тока'];
             return view('options',[
-                'title'=>'Параметры',
+                'title'=>$device,
                 'head' => $head,
                 'rows' => $rows,
                 'id' => $id,

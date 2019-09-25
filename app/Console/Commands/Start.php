@@ -43,18 +43,18 @@ class Start extends Command
         $msg = 'Система была запущена ' . date("Y-m-d H:i:s");
         $to = SysConst::where(['param'=>'CONTROL_E_MAIL'])->first()->val;
         if(!empty($to)){
-            $result = Mail::send('emails.start', array('msg'=>$msg), function($message) use ($to)
+            Mail::send('emails.start', array('msg'=>$msg), function($message) use ($to)
             {
                 $message->to($to)->subject(config('app.name'));
             });
             //запись в лог
-            if($result){
-                $msg = 'Сообщение получателю '. $to .' отправлено!';
-                event(new AddEventLogs('info',$msg));
-            }
-            else{
+            if(count(Mail::failures()) > 0){
                 $msg = 'Возникла ошибка при отправке сообщения о старте системы адресату <strong>'. $to .'</strong>';
                 event(new AddEventLogs('error',$msg));
+            }
+            else{
+                $msg = 'Сообщение о старте системы было отправлено получателю '. $to;
+                event(new AddEventLogs('info',$msg));
             }
         }
     }

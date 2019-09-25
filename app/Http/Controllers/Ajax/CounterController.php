@@ -64,8 +64,7 @@ class CounterController extends Controller
         //выбираем данные за предыдущий период
         $numrow = Counter::where(['device_id' => $id, '_year' => $y, '_month' => $m])->get()->count();
         if ($numrow) {
-            $row = Counter::where(['device_id' => $id, '_year' => $y, '_month' => $m])->first()->get();
-            $this->previous = $row[0]['val'];
+            $this->previous = Counter::where(['device_id' => $id, '_year' => $y, '_month' => $m])->first()->val;
             if ($this->previous > $val)
                 return self::MORE_VAL;
             else

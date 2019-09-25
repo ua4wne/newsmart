@@ -4,7 +4,7 @@
 <table>
     <caption>ЗАГРУЗКА СИСТЕМЫ</caption>
     <tr><th>Параметр</th><th>Занято, Гб</th><th>Всего, Гб</th><th>Использовано, %</th></tr>
-    {{ $content }}
+    {!! $content !!}
 </table>
 <br>
 <p style="color:brown;">Сообщение отправлено почтовым роботом<br>

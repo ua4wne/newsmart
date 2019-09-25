@@ -50,22 +50,23 @@ class CheckFail extends Command
             $content='';
             foreach ($options as $option){
                 $dname = $option->device->name;
-                $content.="<tr><td>$dname</td><td>$option->name</td><td>$option->val</td><td>$option->unit</td><td>$option->updated_at</td></tr>";
+                if($option->device->status=='1') //только для включенных устройств
+                    $content.="<tr><td>$dname</td><td>$option->name</td><td>$option->val</td><td>$option->unit</td><td>$option->updated_at</td></tr>";
             }
             $to = SysConst::where(['param'=>'CONTROL_E_MAIL'])->first()->val;
             if(!empty($to)){
-                $result = Mail::send('emails.check_fail', array('content'=>$content), function($message) use ($to)
+                Mail::send('emails.check_fail', array('content'=>$content), function($message) use ($to)
                 {
                     $message->to($to)->subject('Ошибки считывания данных на ' . date('Y-m-d H:i:s'));
                 });
                 //запись в лог
-                if($result){
-                    $msg = 'Сообщение получателю '. $to .' отправлено!';
-                    event(new AddEventLogs('info',$msg));
-                }
-                else{
+                if(count(Mail::failures()) > 0){
                     $msg = 'Возникла ошибка при отправке сообщения об ошибках считывания данных в системе адресату <strong>'. $to .'</strong>';
                     event(new AddEventLogs('error',$msg));
+                }
+                else{
+                    $msg = 'Сообщение об ошибках считывания данных в системе было отправлено получателю '. $to;
+                    event(new AddEventLogs('info',$msg));
                 }
             }
         }
