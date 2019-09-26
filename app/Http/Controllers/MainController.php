@@ -127,7 +127,7 @@ class MainController extends Controller
                         $check='';
                         if($param->val)
                             $check='checked="checked"';
-                        $html .= '<div class="infobox infobox-blue2">
+                        $html .= '<div class="col-md-4 tile-stats border-blue">
 								        <div class="infobox-data">
 										    <input type="hidden" name="'.$topic.'">
 											<label>
@@ -143,23 +143,23 @@ class MainController extends Controller
                     }
                     elseif($param->alias == 'alarm'){
                         if($param->val){
-                            $html.= '<div class="infobox infobox-red">
-											<div class="infobox-icon">
-												<i class="ace-icon fa fa-bell-o red"></i>
+                            $html.= '<div class="col-md-4 tile-stats border-red">
+											<div class="icon">
+												<i class="fa fa-bell-o red"></i>
 											</div>
 											<div class="infobox-data">
-												<span class="infobox-data-number">' . $param->val . '</span>
+												<span>' . $param->val . '</span>
 												<div class="infobox-content">'.$param->name.'</div>
 											</div>
 									</div>';
                         }
                         else{
-                            $html.= '<div class="infobox infobox-green">
-											<div class="infobox-icon">
-												<i class="ace-icon fa fa-bell-o green"></i>
+                            $html.= '<div class="col-md-4 tile-stats border-green">
+											<div class="icon">
+												<i class="fa fa-bell-o green"></i>
 											</div>
 											<div class="infobox-data">
-												<span class="infobox-data-number">Норма</span>
+												<span>Норма</span>
 												<div class="infobox-content">'.$param->name.'</div>
 											</div>
 									</div>';
@@ -167,77 +167,100 @@ class MainController extends Controller
                     }
                     elseif($param->alias == 'celsio' || $param->alias == 'humidity' || $param->alias == 'power'){
                         if($param->alias == 'celsio'){
-                            if($param->val <= 15)
-                                $color = 'data-color="#87CEEB"';
-                            if($param->val > 15 && $param->val < 30)
-                                $color = 'data-color="#87B87F"';
-                            if($param->val >= 30)
-                                $color = 'data-color="#D15B47"';
+                            $html .= '
+                            <div class="col-md-4 tile-stats">
+                                <canvas data-type="radial-gauge"
+                                    data-title="Температура"
+                                    data-min-value="0"
+                                    data-max-value="40"
+                                    data-width="160"
+                                    data-height="160"
+                                    data-value="' . $param->val . '"
+                                    data-units="°C"
+                                    data-major-ticks="0,5,10,15,20,25,30,35,40"
+                                    data-minor-ticks="2"
+                                    data-highlights=\'[
+                                        { "from": 0, "to": 15, "color": "rgba(135, 206, 235, 1)" },
+                                        { "from": 15, "to": 30, "color": "rgba(135, 184, 127, 1)" },
+                                        { "from": 30, "to": 40, "color": "rgba(209, 91, 71, 1)" }
+                                    ]\'
+                                    data-stroke-ticks="false"
+                                    data-value-box="true"
+                                    data-animation-rule="bounce"
+                                    data-animation-duration="500"
+                                    data-font-value="Led"
+                                    data-animated-value="true"
+                                    data-color-needle-start="rgba(240, 128, 128, 1)"
+                                    data-color-needle-end="rgba(255, 160, 122, .9)"
+                                ></canvas>
+                            </div>';
                         }
                         if($param->alias == 'humidity'){
-                            if($param->val <= 50)
-                                $color = 'data-color="#FFB935"';
-                            if($param->val > 50 && $param->val < 70)
-                                $color = 'data-color="#87B87F"';
-                            if($param->val > 70)
-                                $color = 'data-color="#D15B47"';
+                            $html .= '
+                            <div class="col-md-4 tile-stats">
+                                <canvas data-type="radial-gauge"
+                                    data-title="Влажность"
+                                    data-min-value="0"
+                                    data-max-value="100"
+                                    data-width="160"
+                                    data-height="160"
+                                    data-value="' . $param->val . '"
+                                    data-units="%"
+                                    data-major-ticks="0,10,20,30,40,50,60,70,80,90,100"
+                                    data-minor-ticks="2"
+                                    data-highlights=\'[
+                                        { "from": 0, "to": 50, "color": "rgba(135, 206, 235, 1)" },
+                                        { "from": 50, "to": 70, "color": "rgba(135, 184, 127, 1)" },
+                                        { "from": 70, "to": 100, "color": "rgba(209, 91, 71, 1)" }
+                                    ]\'
+                                    data-stroke-ticks="false"
+                                    data-value-box="true"
+                                    data-animation-rule="bounce"
+                                    data-animation-duration="500"
+                                    data-font-value="Led"
+                                    data-animated-value="true"
+                                    data-color-needle-start="rgba(240, 128, 128, 1)"
+                                    data-color-needle-end="rgba(255, 160, 122, .9)"
+                                ></canvas>
+                            </div>';
                         }
-                        $html.= '<div class="infobox infobox-blue2">
-											<div class="infobox-progress">
-												<div class="easy-pie-chart percentage" data-percent="' . $param->val . '" ' . $color .'>
-													<span class="percent">' . $param->val . '</span>
-												</div>
-											</div>
-
-											<div class="infobox-data">
-												<span class="infobox-text">' . $param->val . $param->unit . '</span>
-												<div class="infobox-content">'.$param->name.'</div>
-											</div>
-										</div>';
-
                     }
                     elseif($param->alias == 'pressure'){
-                        if($param->val <= 740){
-                            $html.= '<div class="infobox infobox-blue">
-											<div class="infobox-icon">
-												<i class="ace-icon fa fa-arrow-down blue"></i>
-											</div>
-											<div class="infobox-data">
-												<span class="infobox-data-number">' . $param->val . '</span>
-												<div class="infobox-content">'.$param->name.'</div>
-											</div>
-									</div>';
-                        }
-                        if($param->val > 740 && $param->val < 750){
-                            $html.= '<div class="infobox infobox-green">
-											<div class="infobox-icon">
-												<i class="ace-icon fa fa-thumbs-o-up green"></i>
-											</div>
-											<div class="infobox-data">
-												<span class="infobox-data-number">Норма</span>
-												<div class="infobox-content">'.$param->name.'</div>
-											</div>
-									</div>';
-                        }
-                        if($param->val >= 750){
-                            $html.= '<div class="infobox infobox-blue">
-											<div class="infobox-icon">
-												<i class="ace-icon fa fa-arrow-up blue"></i>
-											</div>
-											<div class="infobox-data">
-												<span class="infobox-data-number">' . $param->val . '</span>
-												<div class="infobox-content">'.$param->name.'</div>
-											</div>
-									</div>';
-                        }
+                        $html .= '
+                            <div class="col-md-4 tile-stats">
+                                <canvas data-type="radial-gauge"
+                                    data-title="Давление"
+                                    data-min-value="700"
+                                    data-max-value="800"
+                                    data-width="160"
+                                    data-height="160"
+                                    data-value="' . $param->val . '"
+                                    data-units="мм рт ст"
+                                    data-major-ticks="700,710,720,730,740,750,760,770,780,790,800"
+                                    data-minor-ticks="2"
+                                    data-highlights=\'[
+                                        { "from": 700, "to": 740, "color": "rgba(135, 206, 235, 1)" },
+                                        { "from": 740, "to": 750, "color": "rgba(135, 184, 127, 1)" },
+                                        { "from": 750, "to": 800, "color": "rgba(209, 91, 71, 1)" }
+                                    ]\'
+                                    data-stroke-ticks="false"
+                                    data-value-box="true"
+                                    data-animation-rule="bounce"
+                                    data-animation-duration="500"
+                                    data-font-value="Led"
+                                    data-animated-value="true"
+                                    data-color-needle-start="rgba(240, 128, 128, 1)"
+                                    data-color-needle-end="rgba(255, 160, 122, .9)"
+                                ></canvas>
+                            </div>';
                     }
                     else{
-                        $html.= '<div class="infobox infobox-green">
-											<div class="infobox-icon">
-												<i class="ace-icon fa fa-comment green"></i>
+                        $html.= '<div class="col-md-4 tile-stats border-green">
+											<div class="icon">
+												<i class="fa fa-comment green"></i>
 											</div>
 											<div class="infobox-data">
-												<span class="infobox-data-number">Норма</span>
+												<span>Норма</span>
 												<div class="infobox-content">'.$param->name.'</div>
 											</div>
 									</div>';
