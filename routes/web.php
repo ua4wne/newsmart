@@ -174,6 +174,8 @@ Route::middleware(['auth'])->group(function(){
         Route::post('/ajax/add_topic',['uses'=>'Ajax\MqttController@add_topic','as'=>'addTopic']);
         //mqtt/ajax/msg
         Route::post('/ajax/msg',['uses'=>'Ajax\MqttController@newmsg','as'=>'mqttMsg']);
+        //mqtt/ajax/config
+        Route::post('/ajax/config',['uses'=>'Ajax\MqttController@config','as'=>'mqttConfig']);
         //mqtt/ajax/del
         Route::post('/ajax/del_topic',['uses'=>'Ajax\MqttController@delete','as'=>'delTopic']);
     });

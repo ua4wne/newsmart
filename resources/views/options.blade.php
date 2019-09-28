@@ -402,6 +402,7 @@
                 var maxval = $(this).parent().parent().prevAll().eq(3).text();
                 var unit = $(this).parent().parent().prevAll().eq(2).text();
                 var tolog = $(this).parent().parent().prevAll().eq(1).text();
+
                 $('#ename').val(name);
                 $('#eaddress').val(address);
                 $('#emin_val').val(minval);
@@ -415,8 +416,11 @@
                     this.selected=false;
                 });
 
-                $("#ealias :contains("+alias+")").attr("selected", "selected");
-                $("#eto_log :contains("+tolog+")").attr("selected", "selected");
+                $('#ealias option[value='+alias+']').prop('selected', true);
+                if(tolog=="Да")
+                    $('#eto_log option[value=1]').prop('selected', true);
+                else
+                    $('#eto_log option[value=0]').prop('selected', true);
 
                 $('#id_val').val(id);
                 row = $(this).parent().parent();

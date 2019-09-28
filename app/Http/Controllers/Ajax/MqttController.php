@@ -135,6 +135,21 @@ class MqttController extends Controller
         }
     }
 
+    public function config(Request $request){
+        if ($request->isMethod('post')) {
+            $input = $request->except('_token'); //параметр _token нам не нужен
+            if($input['param']=='conf'){
+                //определяем наличие констант для подключения к серверу MQTT
+                $server = SysConst::where(['param'=>'MQTT_SERVER'])->first()->val;
+                $port = SysConst::where(['param'=>'MQTT_PORT'])->first()->val;
+                $login = SysConst::where(['param'=>'MQTT_LOGIN'])->first()->val;
+                $pass = SysConst::where(['param'=>'MQTT_PASSWORD'])->first()->val;
+                $resp = ['server'=>$server, 'port'=>$port, 'login'=>$login, 'pass'=>$pass];
+                return json_encode($resp,JSON_UNESCAPED_UNICODE);
+            }
+        }
+    }
+
     public function delete(Request $request){
         if ($request->isMethod('post')) {
             $input = $request->except('_token'); //параметр _token нам не нужен

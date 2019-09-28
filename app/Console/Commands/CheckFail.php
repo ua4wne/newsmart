@@ -54,7 +54,7 @@ class CheckFail extends Command
                     $content.="<tr><td>$dname</td><td>$option->name</td><td>$option->val</td><td>$option->unit</td><td>$option->updated_at</td></tr>";
             }
             $to = SysConst::where(['param'=>'CONTROL_E_MAIL'])->first()->val;
-            if(!empty($to)){
+            if(!empty($to) && $content!=''){
                 Mail::send('emails.check_fail', array('content'=>$content), function($message) use ($to)
                 {
                     $message->to($to)->subject('Ошибки считывания данных на ' . date('Y-m-d H:i:s'));

@@ -23,6 +23,7 @@ class ControlController extends Controller
                 $log = new GetDate();
                 $log->created_at = date('Y-m-d H:i:s');
                 $log->request = $request->getRequestUri();
+                $log->from = LibraryController::GetRealIp();
                 $log->save();
             }
             $uid = $request['device']; //выделяем UID устройства из запроса и смотрим, есть ли такой в базе

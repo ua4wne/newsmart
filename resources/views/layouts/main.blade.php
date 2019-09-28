@@ -165,34 +165,7 @@
     @show
             <div class="right_col" role="main">
             @section('tile_widget')
-                <!-- top tiles -->
-                    <div class="row top_tiles">
-                        <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-rub"></i></div>
-                                <div class="count">Касса</div>
-                                <h3>Остаток: {{ empty($kassa) ? '0' : $kassa }} (руб.)</h3>
-                                <p><a href="#">подробнее</a></p>
-                            </div>
-                        </div>
-                        <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-arrow-down"></i></div>
-                                <div class="count">Приход</div>
-                                <h3>Итого: {{ empty($coming) ? '0' : $coming }} (руб.)</h3>
-                                <p>за текущий год</p>
-                            </div>
-                        </div>
-                        <div class="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-arrow-up"></i></div>
-                                <div class="count">Расход</div>
-                                <h3>Итого: {{ empty($expense) ? '0' : $expense }} (руб.)</h3>
-                                <p>за текущий год</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /top tiles -->
+
             @endsection
             @yield('tile_widget')
 

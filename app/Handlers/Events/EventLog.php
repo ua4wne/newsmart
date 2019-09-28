@@ -27,7 +27,7 @@ class EventLog
     public function handle(AddEventLogs $event)
     {
         $data = date('Y-m-d H:i:s');
-        \App\Models\Eventlog::create([
+        \App\Models\EventLog::create([
             'type' => $event->type,
             'msg' => $event->text,
             'status' => 1,

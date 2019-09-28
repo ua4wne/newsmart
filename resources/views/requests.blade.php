@@ -46,6 +46,7 @@
             <table id="my_datatable" class="table table-striped table-bordered">
                 <thead>
                 <tr>
+                    <th>Источник</th>
                     <th>Get- запрос</th>
                     <th>Создан</th>
                 </tr>
@@ -53,6 +54,7 @@
                 <tbody>
                 @foreach($rows as $k => $row)
                     <tr>
+                        <td>{{ $row->from }}</td>
                         <td>{{ $row->request }}</td>
                         <td>{{ $row->created_at }}</td>
                     </tr>

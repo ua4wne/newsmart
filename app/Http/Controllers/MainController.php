@@ -3,67 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
+use App\Models\EventLog;
 use App\Models\Location;
 use App\Models\MqttData;
 use App\Models\Option;
+use App\Models\SysConst;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-    public function index(){
-        if(view()->exists('main_index')){
-            return view('main_index',[
-                'title'=>'Панель',
+    public function index()
+    {
+        if (view()->exists('main_index')) {
+            $events = EventLog::where(['stat' => '0'])->orderBy('created_at', 'DESC')->limit(10)->get();
+            return view('main_index', [
+                'title' => 'Панель',
                 'device' => $this->DeviceState(),
                 'tabs' => $this->GetTabs(),
+                'uptime' => $this->getUpTime(),
+                'upload' => $this->upload(),
+                'hdd_info' => $this->hdd_info(),
+                'ram_info' => $this->ram_info(),
+                'events' => $events,
             ]);
         }
         abort(404);
     }
 
-    private function DeviceState(){
-        $models = Device::where(['verify'=>'1'])->get();
+    private function DeviceState()
+    {
+        $models = Device::where(['verify' => '1'])->get();
         $html = '';
-        foreach ($models as $model){
-            $vcc = Option::where(['device_id'=>$model->id,'alias'=>'vcc'])->first();
+        foreach ($models as $model) {
+            $vcc = Option::where(['device_id' => $model->id, 'alias' => 'vcc'])->first();
             $val = $vcc->val;
             $min = $vcc->min_val;
             $max = $vcc->max_val;
-            $mid = ($max + $min)/2;
-            if($val==$max){
+            $mid = ($max + $min) / 2;
+            if ($val == $max) {
                 $ico_vcc = '<i class="fa fa-battery-full green"></i>';
-            }
-            elseif($val>$min && $val<($mid)){
+            } elseif ($val > $min && $val < ($mid)) {
                 $ico_vcc = '<i class="fa fa-battery-quarter"></i>';
-            }
-            elseif($val>$mid && $val<$max){
+            } elseif ($val > $mid && $val < $max) {
                 $ico_vcc = '<i class="fa fa-battery-three-quarters"></i>';
-            }
-            elseif ($val<$min){
+            } elseif ($val < $min) {
                 $ico_vcc = '<i class="fa fa-battery-empty red"></i>';
             }
-            $rssi = Option::where(['device_id'=>$model->id,'alias'=>'rssi'])->first();
-            if($rssi->val > -70){
+            $rssi = Option::where(['device_id' => $model->id, 'alias' => 'rssi'])->first();
+            if ($rssi->val > -70) {
                 $ico_rssi = '<i class="fa fa-signal green"></i>';
-            }
-            elseif($rssi->val > -80 && $rssi->val <= -70) {
+            } elseif ($rssi->val > -80 && $rssi->val <= -70) {
                 $ico_rssi = '<i class="fa fa-signal"></i>';
-            }
-            else{
+            } else {
                 $ico_rssi = '<i class="fa fa-signal red"></i>';
             }
             $time_stamp = strtotime(date('Y-m-d H:i:s')); //получаем текущую метку времени
             $time_last = strtotime($vcc->updated_at);
-            $period = strtotime('+30 minutes',$time_last);
-            if($time_stamp < $period){
+            $period = strtotime('+30 minutes', $time_last);
+            if ($time_stamp < $period) {
                 $stat = '<span class="label label-success arrowed-right arrowed-in">online</span>';
-            }
-            else{
+            } else {
                 $stat = '<span class="label label-danger arrowed-right arrowed-in">offline</span>';
             }
             $html .= '<tr>
-                                            <td><a href="/options/'.$model->id.'" target="_blank">' . $model->name . '</a></td>
+                                            <td><a href="/options/' . $model->id . '" target="_blank">' . $model->name . '</a></td>
 
                                             <td>' . $ico_rssi . '&nbsp;&nbsp;&nbsp;<span class="badge">' . $rssi->val . $rssi->unit . '</span></td>
 
@@ -75,98 +79,81 @@ class MainController extends Controller
         return $html;
     }
 
-    private function GetTabs(){
-        $html='<div class="col-xs-3">';
+    private function GetTabs()
+    {
+        $html = '<div class="col-xs-3">';
         $html .= '<ul class="nav nav-tabs tabs-right" id="LocationTab">';
-        $devices = Device::where(['verify'=>'1'])->select('location_id')->distinct()->get();
+        $devices = Device::where(['verify' => '1'])->select('location_id')->distinct()->get();
         $locid = array();
         foreach ($devices as $device) {
             $locid[] = $device->location_id;
         }
-        $locations = Location::select(['id','name','alias'])->where(['is_show'=>'1'])->whereIn('id', $locid)->orderBy('name','asc')->get();
-        $k=0;
-        foreach ($locations as $location){
-            if($k==0)
+        $locations = Location::select(['id', 'name', 'alias'])->where(['is_show' => '1'])->whereIn('id', $locid)->orderBy('name', 'asc')->get();
+        $k = 0;
+        foreach ($locations as $location) {
+            if ($k == 0)
                 $html .= '<li class="active">';
             else
                 $html .= '<li>';
-            $html .= '<a data-toggle="tab" href="#'.$location->alias.'">' .
+            $html .= '<a data-toggle="tab" href="#' . $location->alias . '">' .
                 $location->name
                 . '</a>
                             </li>';
             $k++;
         }
         $html .= '</ul></div>';
-        $k=0;
+        $k = 0;
         $html .= '<div class="col-xs-9">';
         $html .= '<div class="tab-content">';
-        foreach ($locations as $location){
+        foreach ($locations as $location) {
             //определяем кол-во включенных устройств в помещении, которые контролируются автоматически
-            $devices = Device::select('id')->where(['location_id'=>$location->id,'verify'=>'1','status'=>'1'])->get();
-            if($k==0)
-                $html .= '<div id="'.$location->alias.'" class="tab-pane active">';
+            $devices = Device::select('id')->where(['location_id' => $location->id, 'verify' => '1', 'status' => '1'])->get();
+            if ($k == 0)
+                $html .= '<div id="' . $location->alias . '" class="tab-pane active">';
             else
-                $html .= '<div id="'.$location->alias.'" class="tab-pane">';
-            if(!empty($devices)){ //есть такие устройства
+                $html .= '<div id="' . $location->alias . '" class="tab-pane">';
+            if (!empty($devices)) { //есть такие устройства
                 //определяем device_id
                 $device_id = array();
                 $i = 0;
-                foreach ($devices as $device){
+                foreach ($devices as $device) {
                     array_push($device_id, $device->id);
                     $i++;
                 }
                 //определяем параметры, привязанные к этим устройствам
-                $params = Option::where(['device_id' => $device_id])->whereNotIn('alias',array('vcc','rssi'))->get();
+                $params = Option::where(['device_id' => $device_id])->whereNotIn('alias', array('vcc', 'rssi'))->get();
                 $step = 0;
                 $html .= '<div class="row">
                             <div class="col-xs-12">';
-                foreach ($params as $param){
-                    if($param->alias == 'state' || $param->alias == 'light'){
-                        $topic_id = Topic::where(['option_id'=>$param->id])->first()->topic_id;
-                        $topic=MqttData::find($topic_id)->topic;
-                        $check='';
-                        if($param->val)
-                            $check='checked="checked"';
-                        $html .= '<div class="col-md-4 tile-stats border-blue">
-								        <div class="infobox-data">
-										    <input type="hidden" name="'.$topic.'">
-											<label>
-												<input type="checkbox" name="switch-'.$param->id.'" id = "'.$param->id.'" class="ace ace-switch ace-switch-4 btn-rotate" '.$check.' >
-												<span class="lbl"></span>
-											</label>
-
-											<div class="infobox-content">
-												<span class="infobox-text">'.$param->name.'</span>
-											</div>
-										</div>
+                foreach ($params as $param) {
+                    if ($param->alias == 'state' || $param->alias == 'light') {
+                        $topic_id = Topic::where(['option_id' => $param->id])->first()->topic_id;
+                        $topic = MqttData::find($topic_id)->topic;
+                        if ($param->val) {
+                            $html .= '<div class="col-md-4">
+                                    <input type="hidden" name="' . $topic . '" value="' . $param->val . '">
+                                    <btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-lightbulb-o red"></i>' . $param->name . '</btn>
 								</div>';
-                    }
-                    elseif($param->alias == 'alarm'){
+                        } else {
+                            $html .= '<div class="col-md-4">
+                                    <input type="hidden" name="' . $topic . '" value="' . $param->val . '">
+                                    <btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-lightbulb-o"></i>' . $param->name . '</btn>
+								</div>';
+                        }
+                    } /*elseif($param->alias == 'alarm'){
                         if($param->val){
-                            $html.= '<div class="col-md-4 tile-stats border-red">
-											<div class="icon">
-												<i class="fa fa-bell-o red"></i>
-											</div>
-											<div class="infobox-data">
-												<span>' . $param->val . '</span>
-												<div class="infobox-content">'.$param->name.'</div>
-											</div>
-									</div>';
+                            $html.= '<div class="col-md-12">
+                                <a class="btn btn-app"><i class="fa fa-bell-o red"></i>'.$param->name.'</a>
+							</div>';
                         }
                         else{
-                            $html.= '<div class="col-md-4 tile-stats border-green">
-											<div class="icon">
-												<i class="fa fa-bell-o green"></i>
-											</div>
-											<div class="infobox-data">
-												<span>Норма</span>
-												<div class="infobox-content">'.$param->name.'</div>
-											</div>
-									</div>';
+                            $html.= '<div class="col-md-12">
+                                <a class="btn btn-app"><i class="fa fa-bell-o green"></i>'.$param->name.'</a>
+							</div>';
                         }
-                    }
-                    elseif($param->alias == 'celsio' || $param->alias == 'humidity' || $param->alias == 'power'){
-                        if($param->alias == 'celsio'){
+                    }*/
+                    elseif ($param->alias == 'celsio' || $param->alias == 'humidity' || $param->alias == 'power') {
+                        if ($param->alias == 'celsio') {
                             $html .= '
                             <div class="col-md-4 tile-stats">
                                 <canvas data-type="radial-gauge"
@@ -195,7 +182,7 @@ class MainController extends Controller
                                 ></canvas>
                             </div>';
                         }
-                        if($param->alias == 'humidity'){
+                        if ($param->alias == 'humidity') {
                             $html .= '
                             <div class="col-md-4 tile-stats">
                                 <canvas data-type="radial-gauge"
@@ -224,8 +211,7 @@ class MainController extends Controller
                                 ></canvas>
                             </div>';
                         }
-                    }
-                    elseif($param->alias == 'pressure'){
+                    } elseif ($param->alias == 'pressure') {
                         $html .= '
                             <div class="col-md-4 tile-stats">
                                 <canvas data-type="radial-gauge"
@@ -254,24 +240,12 @@ class MainController extends Controller
                                 ></canvas>
                             </div>';
                     }
-                    else{
-                        $html.= '<div class="col-md-4 tile-stats border-green">
-											<div class="icon">
-												<i class="fa fa-comment green"></i>
-											</div>
-											<div class="infobox-data">
-												<span>Норма</span>
-												<div class="infobox-content">'.$param->name.'</div>
-											</div>
-									</div>';
-                    }
                 }
 
                 $html .= '    </div>
                             </div>
                           </div>';
-            }
-            else{
+            } else {
                 $html .= '     <div class="row">
 
                                 </div>
@@ -283,5 +257,65 @@ class MainController extends Controller
         $html .= '</div></div>';
 
         return $html;
+    }
+
+    /**
+     * Gets system up-time
+     *
+     * @return string
+     */
+    protected function getUpTime()
+    {
+        $uptime = shell_exec('uptime -p');
+        $uptime = str_replace('up', '', $uptime);
+        $uptime = str_replace('days', 'д', $uptime);
+        $uptime = str_replace('hours', 'ч', $uptime);
+        $uptime = str_replace('minute', 'м', $uptime);
+        $uptime = str_replace('minutes', 'м', $uptime);
+        $uptime = str_replace(',','',$uptime);
+        if (empty($uptime))
+            return '?:?:?';
+        return $uptime;
+    }
+
+    protected function upload()
+    {
+        $name = strtolower(php_uname('s'));
+        if (strpos($name, 'windows') !== FALSE) {
+            return '0';
+        } elseif (strpos($name, 'linux') !== FALSE) {
+            return round(array_sum(sys_getloadavg()) / count(sys_getloadavg()), 2);
+        }
+    }
+
+    protected function hdd_info()
+    {
+        $name = strtolower(php_uname('s'));
+        if (strpos($name, 'windows') !== FALSE) {
+            return '0';
+        } elseif (strpos($name, 'linux') !== FALSE) {
+            $stat['hdd_free'] = round(disk_free_space("/") / 1024 / 1024 / 1024, 2);
+            $stat['hdd_total'] = round(disk_total_space("/") / 1024 / 1024 / 1024, 2);
+            $stat['hdd_used'] = $stat['hdd_total'] - $stat['hdd_free'];
+            $stat['hdd_percent'] = round(sprintf('%.2f', ($stat['hdd_used'] / $stat['hdd_total']) * 100), 0);
+            return $stat['hdd_percent'];
+        }
+    }
+
+    protected function ram_info()
+    {
+        $name = strtolower(php_uname('s'));
+        if (strpos($name, 'windows') !== FALSE) {
+            return '0';
+        } elseif (strpos($name, 'linux') !== FALSE) {
+            //memory stat
+            $stat['mem_percent'] = round(shell_exec("free | grep Mem | awk '{print $3/$2 * 100.0}'"), 0);
+            /*$mem_result = shell_exec("cat /proc/meminfo | grep MemTotal");
+            $stat['mem_total'] = round(preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
+            $mem_result = shell_exec("cat /proc/meminfo | grep MemFree");
+            $stat['mem_free'] = round(preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
+            $stat['mem_used'] = $stat['mem_total'] - $stat['mem_free'];*/
+            return $stat['mem_percent'];
+        }
     }
 }
