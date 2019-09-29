@@ -170,6 +170,8 @@ class LibraryController extends Controller
                 $rule->runtime = date( 'Y-m-d H:i:s' , $runtime);
                 $rule->save();
             }
+            //запись в журнал
+            event(new AddEventLogs('info',$msg));
         }
     }
 
@@ -182,10 +184,6 @@ class LibraryController extends Controller
         if(count(Mail::failures()) > 0){
             $msg = 'Возникла ошибка при отправке системного сообщения адресату <strong>'. $to .'</strong>';
             event(new AddEventLogs('error',$msg));
-        }
-        else{
-            $msg = 'Сообщение получателю '. $to .' отправлено!';
-            event(new AddEventLogs('info',$msg));
         }
     }
 

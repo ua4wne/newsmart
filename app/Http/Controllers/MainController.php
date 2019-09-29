@@ -33,7 +33,7 @@ class MainController extends Controller
 
     private function DeviceState()
     {
-        $models = Device::where(['verify' => '1'])->get();
+        $models = Device::where(['verify' => '1','status'=>'1'])->get();
         $html = '';
         foreach ($models as $model) {
             $vcc = Option::where(['device_id' => $model->id, 'alias' => 'vcc'])->first();
@@ -44,9 +44,9 @@ class MainController extends Controller
             if ($val == $max) {
                 $ico_vcc = '<i class="fa fa-battery-full green"></i>';
             } elseif ($val > $min && $val < ($mid)) {
-                $ico_vcc = '<i class="fa fa-battery-quarter"></i>';
+                $ico_vcc = '<i class="fa fa-battery-quarter text-warning"></i>';
             } elseif ($val > $mid && $val < $max) {
-                $ico_vcc = '<i class="fa fa-battery-three-quarters"></i>';
+                $ico_vcc = '<i class="fa fa-battery-three-quarters text-success"></i>';
             } elseif ($val < $min) {
                 $ico_vcc = '<i class="fa fa-battery-empty red"></i>';
             }
@@ -54,7 +54,7 @@ class MainController extends Controller
             if ($rssi->val > -70) {
                 $ico_rssi = '<i class="fa fa-signal green"></i>';
             } elseif ($rssi->val > -80 && $rssi->val <= -70) {
-                $ico_rssi = '<i class="fa fa-signal"></i>';
+                $ico_rssi = '<i class="fa fa-signal text-warning"></i>';
             } else {
                 $ico_rssi = '<i class="fa fa-signal red"></i>';
             }
@@ -131,13 +131,21 @@ class MainController extends Controller
                         $topic = MqttData::find($topic_id)->topic;
                         if ($param->val) {
                             $html .= '<div class="col-md-4">
-                                    <input type="hidden" name="' . $topic . '" value="' . $param->val . '">
-                                    <btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-lightbulb-o red"></i>' . $param->name . '</btn>
+                                    <input type="hidden" name="' . $topic . '" value="' . $param->val . '">';
+                            if(mb_strtolower($param->name)=='вентилятор')
+                                $html .='<btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-asterisk fa-spin red"></i>' . $param->name . '</btn>
+								</div>';
+                            else
+                                $html .='<btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-lightbulb-o red"></i>' . $param->name . '</btn>
 								</div>';
                         } else {
                             $html .= '<div class="col-md-4">
-                                    <input type="hidden" name="' . $topic . '" value="' . $param->val . '">
-                                    <btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-lightbulb-o"></i>' . $param->name . '</btn>
+                                    <input type="hidden" name="' . $topic . '" value="' . $param->val . '">';
+                            if(mb_strtolower($param->name)=='вентилятор')
+                                $html .='<btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-asterisk"></i>' . $param->name . '</btn>
+								</div>';
+                            else
+                                $html .='<btn name="switch-' . $param->id . '" id = "' . $param->id . '" class="btn btn-app"><i class="fa fa-lightbulb-o"></i>' . $param->name . '</btn>
 								</div>';
                         }
                     } /*elseif($param->alias == 'alarm'){
@@ -270,8 +278,8 @@ class MainController extends Controller
         $uptime = str_replace('up', '', $uptime);
         $uptime = str_replace('days', 'д', $uptime);
         $uptime = str_replace('hours', 'ч', $uptime);
-        $uptime = str_replace('minute', 'м', $uptime);
         $uptime = str_replace('minutes', 'м', $uptime);
+        $uptime = str_replace('minute', 'м', $uptime);
         $uptime = str_replace(',','',$uptime);
         if (empty($uptime))
             return '?:?:?';
@@ -309,12 +317,18 @@ class MainController extends Controller
             return '0';
         } elseif (strpos($name, 'linux') !== FALSE) {
             //memory stat
-            $stat['mem_percent'] = round(shell_exec("free | grep Mem | awk '{print $3/$2 * 100.0}'"), 0);
-            /*$mem_result = shell_exec("cat /proc/meminfo | grep MemTotal");
+            /*$stat['mem_percent'] = round(shell_exec("free | grep Mem | awk '{print $3/$2 * 100.0}'"), 0);
+            $mem_result = shell_exec("cat /proc/meminfo | grep MemTotal");
             $stat['mem_total'] = round(preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
             $mem_result = shell_exec("cat /proc/meminfo | grep MemFree");
             $stat['mem_free'] = round(preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
             $stat['mem_used'] = $stat['mem_total'] - $stat['mem_free'];*/
+            $mem_result = shell_exec("cat /proc/meminfo | grep MemTotal");
+            $stat['mem_total'] = round(preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
+            $mem_result = shell_exec("cat /proc/meminfo | grep MemFree");
+            $stat['mem_free'] = round(preg_replace("#[^0-9]+(?:\.[0-9]*)?#", "", $mem_result) / 1024 / 1024, 3);
+            $stat['mem_used'] = $stat['mem_total'] - $stat['mem_free'];
+            $stat['mem_percent'] = round(sprintf('%.2f',($stat['mem_used']/$stat['mem_total']) * 100), 0);
             return $stat['mem_percent'];
         }
     }

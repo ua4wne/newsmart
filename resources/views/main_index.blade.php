@@ -3,30 +3,48 @@
 @section('tile_widget')
     <!-- top tiles -->
     <div class="row top_tiles">
-        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="animated flipInY col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
-                <div class="icon"><i class="fa fa-hdd-o"></i></div>
+                @if($hdd_info<71)
+                    <div class="icon"><i class="fa fa-hdd-o text-success"></i></div>
+                @elseif($hdd_info >70 && $hdd_info<91)
+                    <div class="icon"><i class="fa fa-hdd-o text-warning"></i></div>
+                @elseif($hdd_info >90)
+                    <div class="icon"><i class="fa fa-hdd-o text-danger"></i></div>
+                @endif
                 <div class="count">{{ $hdd_info }}%</div>
                 <h3>Занято на диске</h3>
             </div>
         </div>
-        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="animated flipInY col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
-                <div class="icon"><i class="fa fa-server"></i></div>
+                @if($ram_info<71)
+                    <div class="icon"><i class="fa fa-server text-success"></i></div>
+                @elseif($ram_info >70 && $ram_info<91)
+                    <div class="icon"><i class="fa fa-server text-warning"></i></div>
+                @elseif($ram_info >90)
+                    <div class="icon"><i class="fa fa-server text-danger"></i></div>
+                @endif
                 <div class="count">{{ $ram_info }}%</div>
                 <h3>Занято памяти</h3>
             </div>
         </div>
-        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="animated flipInY col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
                 <div class="icon"><i class="fa fa-clock-o"></i></div>
                 <div class="count">{{ $uptime }}</div>
                 <h3>Время работы</h3>
             </div>
         </div>
-        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="animated flipInY col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
-                <div class="icon"><i class="fa fa-tasks"></i></div>
+                @if($upload<71)
+                    <div class="icon"><i class="fa fa-tasks text-success"></i></div>
+                @elseif($upload >70 && $upload<91)
+                    <div class="icon"><i class="fa fa-tasks text-warning"></i></div>
+                @elseif($upload >90)
+                    <div class="icon"><i class="fa fa-tasks text-danger"></i></div>
+                @endif
                 <div class="count">{{ $upload }}%</div>
                 <h3>Загрузка системы</h3>
             </div>
@@ -39,7 +57,7 @@
     <!-- page content -->
 
     <div class="row">
-        <div class="col-md-6 col-sm-6 col-xs-12 overflow_hidden">
+        <div class="col-md-6 col-sm-12 col-xs-12 overflow_hidden">
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Управление и климат-контроль</h2>
@@ -50,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-12 overflow-auto">
+        <div class="col-md-6 col-sm-12 col-xs-12 overflow-auto">
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-shield blue"></i> Безопасность</h2>
@@ -75,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-12 overflow_hidden">
+        <div class="col-md-6 col-sm-12 col-xs-12 overflow_hidden">
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-wifi blue"></i> WiFi контроллеры</h2>
@@ -86,18 +104,10 @@
                         <table class="table table-bordered table-striped">
                             <thead class="thin-border-bottom">
                             <tr>
-                                <th>
-                                    <i class="fa fa-caret-right blue"></i>Наименование
-                                </th>
-                                <th>
-                                    <i class="fa fa-caret-right blue"></i>Уровень сигнала
-                                </th>
-                                <th>
-                                    <i class="fa fa-caret-right blue"></i>Батарея
-                                </th>
-                                <th>
-                                    <i class="fa fa-caret-right blue"></i>Статус
-                                </th>
+                                <th>Наименование</th>
+                                <th>Уровень сигнала</th>
+                                <th>Батарея</th>
+                                <th>Статус</th>
                             </tr>
                             </thead>
 
@@ -109,7 +119,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-12 overflow_hidden">
+        <div class="col-md-6 col-sm-12 col-xs-12 overflow_hidden">
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-bell blue"></i> Последние события</h2>
@@ -255,14 +265,19 @@
             click: function () {
                 let stat = $(this).prev().val();
                 let ptopic = $(this).prev().attr('name');
+                let name = $(this).text().toLowerCase();
                 if (stat == '1') {
                     var pval = '0';
                     $(this).prev().val('0');
                     $(this).children().removeClass('red');
+                    if(name=='вентилятор')
+                        $(this).children().removeClass('fa-spin');
                 } else {
                     var pval = '1';
                     $(this).prev().val('1');
-                    $(this).children().addClass('red')
+                    $(this).children().addClass('red');
+                    if(name=='вентилятор')
+                        $(this).children().addClass('fa-spin');
                 }
                 var message = new Paho.MQTT.Message(pval);
                 message.destinationName = ptopic;
