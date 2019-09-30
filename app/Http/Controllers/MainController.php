@@ -277,7 +277,9 @@ class MainController extends Controller
         $uptime = shell_exec('uptime -p');
         $uptime = str_replace('up', '', $uptime);
         $uptime = str_replace('days', 'д', $uptime);
+        $uptime = str_replace('day', 'д', $uptime);
         $uptime = str_replace('hours', 'ч', $uptime);
+        $uptime = str_replace('hour', 'ч', $uptime);
         $uptime = str_replace('minutes', 'м', $uptime);
         $uptime = str_replace('minute', 'м', $uptime);
         $uptime = str_replace(',','',$uptime);

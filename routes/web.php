@@ -193,6 +193,26 @@ Route::middleware(['auth'])->group(function(){
         //eventlogs/ajax/read
         Route::post('/ajax/read',['uses'=>'Ajax\EventLogController@read','as'=>'readLog']);
     });
+    //billing/ группа обработки роутов billing
+    Route::group(['prefix'=>'billing'], function(){
+        Route::get('/',['uses'=>'BillingController@index','as'=>'billing']);
+        //billing/ajax/pie
+        Route::post('/ajax/pie',['uses'=>'Ajax\BillingController@pie','as'=>'pie_graph']);
+        //billing/ajax/bar
+        Route::post('/ajax/bar',['uses'=>'Ajax\BillingController@bar','as'=>'bar_graph']);
+    });
+    //picking/ группа обработки роутов picking
+    Route::group(['prefix'=>'picking'], function(){
+        Route::get('/',['uses'=>'PickingController@index','as'=>'picking']);
+        //picking/ajax/read
+        Route::post('/ajax/read',['uses'=>'Ajax\PickingController@read','as'=>'picking_tbl']);
+    });
+    //report/ группа обработки роутов report
+    Route::group(['prefix'=>'report'], function(){
+        Route::get('/',['uses'=>'ReportController@index','as'=>'report']);
+        //report/ajax/read
+        Route::post('/ajax/read',['uses'=>'Ajax\ReportController@read','as'=>'data_graph']);
+    });
 });
 
 Auth::routes();

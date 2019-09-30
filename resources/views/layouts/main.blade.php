@@ -85,9 +85,9 @@
                                 </li>
                                 <li><a><i class="fa fa-bar-chart-o"></i> Отчеты <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="#">Расходы ЖКХ</a></li>
-                                        <li><a href="#">Критические остатки</a></li>
-                                        <li><a href="#">Данные</a></li>
+                                        <li><a href="{{ route('billing') }}">Расходы ЖКХ</a></li>
+                                        <li><a href="{{ route('picking') }}">Критические остатки</a></li>
+                                        <li><a href="{{ route('report') }}">Данные</a></li>
                                     </ul>
                                 </li>
                             </ul>
