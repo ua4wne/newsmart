@@ -4,6 +4,8 @@
 /public/images/gallery
 /storage/*.key
 /vendor
+/.idea
+.gitignore
 .env
 .phpunit.result.cache
 Homestead.json

@@ -17,6 +17,8 @@ class MainController extends Controller
     {
         if (view()->exists('main_index')) {
             $events = EventLog::where(['stat' => '0'])->orderBy('created_at', 'DESC')->limit(10)->get();
+            //показывать или нет панель загрузки сервера
+            $show_load = SysConst::where(['param'=>'SHOW_SERVER_LOAD'])->first()->val;
             return view('main_index', [
                 'title' => 'Панель',
                 'device' => $this->DeviceState(),
@@ -26,6 +28,7 @@ class MainController extends Controller
                 'hdd_info' => $this->hdd_info(),
                 'ram_info' => $this->ram_info(),
                 'events' => $events,
+                'show_load' => $show_load,
             ]);
         }
         abort(404);
@@ -83,7 +86,7 @@ class MainController extends Controller
     {
         $html = '<div class="col-xs-3">';
         $html .= '<ul class="nav nav-tabs tabs-right" id="LocationTab">';
-        $devices = Device::where(['verify' => '1'])->select('location_id')->distinct()->get();
+        $devices = Device::where(['verify' => '1','status'=>'1'])->select('location_id')->distinct()->get();
         $locid = array();
         foreach ($devices as $device) {
             $locid[] = $device->location_id;
@@ -276,6 +279,8 @@ class MainController extends Controller
     {
         $uptime = shell_exec('uptime -p');
         $uptime = str_replace('up', '', $uptime);
+        $uptime = str_replace('weeks', 'н', $uptime);
+        $uptime = str_replace('week', 'н', $uptime);
         $uptime = str_replace('days', 'д', $uptime);
         $uptime = str_replace('day', 'д', $uptime);
         $uptime = str_replace('hours', 'ч', $uptime);

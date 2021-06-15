@@ -64,10 +64,10 @@ class CheckFail extends Command
                     $msg = 'Возникла ошибка при отправке сообщения об ошибках считывания данных в системе адресату <strong>'. $to .'</strong>';
                     event(new AddEventLogs('error',$msg));
                 }
-                else{
+                /*else{
                     $msg = 'Сообщение об ошибках считывания данных в системе было отправлено получателю '. $to;
                     event(new AddEventLogs('info',$msg));
-                }
+                }*/
             }
         }
     }

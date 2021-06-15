@@ -56,7 +56,7 @@ class MaterialController extends Controller
         }
         if(view()->exists('refs.materialAdd')){
             //выбираем все категории
-            $cats = Category::all();
+            $cats = Category::orderBy('name','asc')->get();
             $catsel = array();
             foreach ($cats as $val){
                 $catsel[$val->id] = $val->name;
@@ -112,7 +112,7 @@ class MaterialController extends Controller
         $old = $model->toArray(); //сохраняем в массиве предыдущие значения полей модели Currency
         if(view()->exists('refs.materialEdit')){
             //выбираем все категории
-            $cats = Category::all();
+            $cats = Category::orderBy('name','asc')->get();
             $catsel = array();
             foreach ($cats as $val){
                 $catsel[$val->id] = $val->name;

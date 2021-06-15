@@ -83,10 +83,10 @@ class SysState extends Command
                 $msg = 'Возникла ошибка при отправке ежедневного сообщения о состоянии системы адресату <strong>'. $to .'</strong>';
                 event(new AddEventLogs('error',$msg));
             }
-            else{
+            /*else{
                 $msg = 'Сообщение о состоянии системы было отправлено получателю '. $to;
                 event(new AddEventLogs('info',$msg));
-            }
+            }*/
         }
     }
 }

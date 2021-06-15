@@ -2,6 +2,7 @@
 
 @section('tile_widget')
     <!-- top tiles -->
+    @if($show_load == 'true')
     <div class="row top_tiles">
         <div class="animated flipInY col-lg-3 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
@@ -50,6 +51,7 @@
             </div>
         </div>
     </div>
+    @endif
     <!-- /top tiles -->
 @endsection
 

@@ -52,10 +52,10 @@ class Start extends Command
                 $msg = 'Возникла ошибка при отправке сообщения о старте системы адресату <strong>'. $to .'</strong>';
                 event(new AddEventLogs('error',$msg));
             }
-            else{
+            /*else{
                 $msg = 'Сообщение о старте системы было отправлено получателю '. $to;
                 event(new AddEventLogs('info',$msg));
-            }
+            }*/
         }
     }
 }
